@@ -1,4 +1,4 @@
-![](https://storage.rockett.pw/~typeset/before_after.gif)
+![](before_after.gif)
 
 ## PHP Typeset
 
