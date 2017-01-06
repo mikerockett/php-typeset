@@ -58,7 +58,7 @@ $html = $typeset->typeset($html);
 
 ### Some notes
 
-**In ALPHA, this PHP Typeset is currently under development, and is subject to change.**
+**In ALPHA, PHP Typeset is currently under development, and is subject to change.**
 
 Additionally, when changes are made to the JS version of Typeset, they will be mirrored here, if possible. The following JS to-do items will also be incorporated here when implemented:
 
