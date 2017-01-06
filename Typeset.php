@@ -1,6 +1,6 @@
 <?php
 
-/**
+/**!
  * PHP Typeset -----------------------------------------------------------------------
  *
  * Typeset is an HTML pre-processor for web typography. It provides correct
@@ -26,7 +26,9 @@
  *
  * @author Mike Rockett: https://github.com/mikerockett
  * @license CC0-1.0: https://creativecommons.org/publicdomain/zero/1.0/
- *
+ */
+
+/*!
  * Usage: ----------------------------------------------------------------------------
  *
  * 1. Create a new Typeset object. Note that 'hanging_punctuation'
@@ -64,6 +66,8 @@ class Typeset
      */
     const MODULES = [
         'quotes',
+        'marks',
+        'symbols', // default: off
         'capitals_numbers', // default: off
         'ligatures',
         'punctuation',
@@ -80,6 +84,12 @@ class Typeset
     public $classCapitals = 'capitals';
 
     /**
+     * Exponent CSS class
+     * @var string
+     */
+    public $classExponent = 'exponent';
+
+    /**
      * Number CSS class
      * @var string
      */
@@ -90,12 +100,6 @@ class Typeset
      * @var string
      */
     public $classOrdinal = 'ordinal';
-
-    /**
-     * Exponent CSS class
-     * @var string
-     */
-    public $classExponent = 'exponent';
 
     /**
      * Current ignore rule
@@ -123,8 +127,8 @@ class Typeset
         'capitals_numbers',
         'hanging_punctuation',
         'simple_math',
-    ]])
-    {
+        'symbols',
+    ]]) {
         // Merge the new options with the default options
         $this->options = (object) array_merge($this->options, $options);
     }
@@ -189,7 +193,7 @@ class Typeset
 
     /**
      * Escape ampersands and arrows
-     * @param $text
+     * @param  $text
      * @return string
      */
     protected function _escape($text)
@@ -203,7 +207,7 @@ class Typeset
     }
 
     /**
-     * @param $text
+     * @param  $text
      * @return string
      */
     protected function doCapitalsNumbers($text)
@@ -391,6 +395,34 @@ class Typeset
     }
 
     /**
+     * Converts parenthesised marks to their proper equivalents.
+     * @param  $text
+     * @return string
+     */
+    protected function doMarks($text)
+    {
+        // Define each mark with its unicode symbol:
+        $marks = [
+            'C' => '24B8',
+            'R' => '2117',
+            'P' => '24C7',
+            'SM' => '2120',
+            'TM' => '2122',
+        ];
+
+        foreach ($marks as $mark => $symbolCode) {
+            $upperMark = "($mark)";
+            $lowerMark = strtolower($upperMark);
+            // Replace the lower and upper mark:
+            $text = str_replace([$upperMark, $lowerMark], $this->uchr($symbolCode), $text);
+            // Simple 501(c) reversal:
+            $text = str_replace('501' . $this->uchr('24B8'), '501(c)', $text);
+        }
+
+        return $text;
+    }
+
+    /**
      * Wrap ordinals in sup tags
      * @param  $text
      * @return string
@@ -409,8 +441,8 @@ class Typeset
     /**
      * Convert hypens and double hyphens to dashes,
      * and triple-periods to ellipses.
-     * @param $text
-     * @param $node
+     * @param  $text
+     * @param  $node
      * @return string
      */
     protected function doPunctuation($text, $node)
@@ -434,8 +466,8 @@ class Typeset
      * quotation-equivalents, and convert any remaining
      * marks to single and double primes. Allows for
      * straight quotations to be escaped for preservation.
-     * @param $text
-     * @param $node
+     * @param  $text
+     * @param  $node
      * @return string
      */
     protected function doQuotes($text, $node)
@@ -530,8 +562,40 @@ class Typeset
     }
 
     /**
+     * Basic symbol conversion.
+     * Disabled by default - experimental, and not all fonts support these
+     * Examples:
+     *     It was No. 17 on the list. => It was № 17 on the list.
+     *     In S 12 of the charter, ... => In § 12 of the charter, ...
+     *     Then, in S 13-54, ... => Then, in §§ 13-54, ...
+     * @param  $text
+     * @return string
+     */
+    protected function doSymbols($text)
+    {
+        // Define each symbol combination expression
+        $symbols = [
+            '/(?!\s)?(?:N|n)o\.\s(\d+)/' => ['numero', $this->uchr('2116') . " $1"],
+            '/(\w+)\?\!/' => ['interrobang', "$1" . $this->uchr('203D')],
+            '/(?!\s)?(?:SS?)\s([0-9A-Z.]+[-])/' => ['silcrow', $this->uchr('00A7') . $this->uchr('00A7') . " $1"],
+            '/(?!\s)?(?:S)\s([0-9A-Z.]+[^-])/' => ['silcrow', $this->uchr('00A7') . " $1"],
+        ];
+
+        foreach ($symbols as $plain => $replacement) {
+            if (isset($this->options->symbols) &&
+                is_array($this->options->symbols) &&
+                in_array('disable_' . $replacement[0], $this->options->symbols, true)) {
+                continue;
+            }
+            $text = preg_replace($plain, $replacement[1], $text);
+        }
+
+        return $text;
+    }
+
+    /**
      * Initiate node traversal with phpQuery, passing each node
-     * to the findTextNodes method for processing.
+     * to the textNodes method for processing.
      * @param $input
      */
     protected function nodes($input)
