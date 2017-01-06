@@ -9,7 +9,7 @@ Powered by [phpQuery](https://github.com/electrolinux/phpquery), this port for P
 - Simple math conversion (multiplication, division, exponents) (disabled by default)
 - Ordinal wrapping (1st, 2nd ...)
 - Conversion of parenthesised marks to their proper equivalents (© ℗ ® ℠ ™)
-- Basic symbol conversion (numero №, silcrow/section §) (disabled by default)
+- Basic symbol conversion (numero №, silcrow/section §, interrobang ‽) (disabled by default)
 
 See inside the class for more information.
 
