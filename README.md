@@ -42,7 +42,7 @@ $typeset = new Typeset([
 $typeset = new Typeset([
 
 	// Disable a module; overrides the default:
-    'disable' => ['hanging_punctuation'],
+    'disable' => ['HangingPunctuation'],
 
     // Don't allow Typeset to process any of these:
     'ignore' => '.skip, #anything, .which-matches',
