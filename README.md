@@ -2,7 +2,7 @@
 
 ## PHP Typeset
 
-PHP Typeset is a port of **[Typeset](https://github.com/davidmerfield/Typeset)** for JavaScript to PHP. Typeset is an HTML pre-processor for web typography. It provides correct quotation substitution, small-caps coversion, hyphenation, basic ligatures, hanging-punctuation, space substitution, and more.
+PHP Typeset is a port of **[Typeset](https://github.com/davidmerfield/Typeset)** for JavaScript to PHP. Typeset is an HTML pre-processor for web typography. It provides correct quotation substitution, small-caps conversion, hyphenation, basic ligatures, hanging-punctuation, space substitution, and more.
 
 This port retains all features, excluding hyphenation, which should be left up to the browser due to performance issues (it's recommended that you use **[Hypher](https://github.com/bramstein/hypher)** by Bram Stein as an alternative) and optical margin alignment (David disabled this in the JS version due to accessibility issues). It also introduces simple math conversion (multiplication, division, exponents) and ordinal wrapping, and adds number wrapping to the small-caps conversion (module has been renamed for this purpose).
 
