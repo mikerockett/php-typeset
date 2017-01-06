@@ -18,7 +18,7 @@ See inside the class for more information.
 
 You'll need Composer to get started with Typeset:
 
-Run `composer require rockett/php-typeset` or download the library and run `composer install` to get the phpQuery dependency.
+Run `composer require rockett/php-typeset:dev-master` (no version-release as yet) or download the library and run `composer install` to get the phpQuery dependency.
 
 ```php
 // Require the autoloader:
