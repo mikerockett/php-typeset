@@ -28,31 +28,6 @@
  * @license CC0-1.0: https://creativecommons.org/publicdomain/zero/1.0/
  */
 
-/*!
- * Usage: ----------------------------------------------------------------------------
- *
- * 1. Create a new Typeset object. Note that 'hanging_punctuation'
- *    and 'capitals_numbers' is disabled by default, for performance reasons.
- *    You can also opt to ignore specific elements by means of a CSS selector.
- *
- *      $typeset = new Typeset(); // or
- *      $typeset = new Typeset([]); // to enable all features, or
- *      $typeset = new Typeset([
- *          'disable' => ['hanging_punctuation'], // array to disable a module, or
- *          'ignore' => '.skip, #anything, .which-matches', // to ignore elements.
- *      ]);
- *
- * 2. (Optional) Rename the classes that Typeset gives to span elements:
- *
- *      $typeset->classCapitals = 'small-caps';
- *      $typeset->classNumber = 'numerics';
- *      $typeset->classOrdinal = 'ord';
- *
- * 3. Typeset your HTML!
- *
- *      $html = $typeset->typeset($html);
- */
-
 class Typeset
 {
     /**
@@ -69,7 +44,7 @@ class Typeset
         'marks',
         'symbols', // default: off
         'capitals_numbers', // default: off
-        'ligatures',
+        'ligatures', // default: off
         'punctuation',
         'hanging_punctuation', // default: off
         'simple_math', // default: off
@@ -126,6 +101,7 @@ class Typeset
     public function __construct($options = ['disable' => [
         'capitals_numbers',
         'hanging_punctuation',
+        'ligatures',
         'simple_math',
         'symbols',
     ]]) {
