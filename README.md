@@ -8,9 +8,8 @@ Powered by [phpQuery](https://github.com/electrolinux/phpquery), this port for P
 
 - Simple math conversion (multiplication, division, exponents) (disabled by default)
 - Ordinal wrapping (1st, 2nd ...)
-- Number wrapping added to the small-caps conversion (module has been renamed for this purpose) (can be disabled)
-- Conversion of parenthesised marks to their proper equivalents: © ℗ ® ℠ ™
-- Basic symbol conversion (numero, silcrow/section symbol) (disabled by default)
+- Conversion of parenthesised marks to their proper equivalents (© ℗ ® ℠ ™)
+- Basic symbol conversion (numero №, silcrow/section §) (disabled by default)
 
 See inside the class for more information.
 
