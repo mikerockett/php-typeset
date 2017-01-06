@@ -28,6 +28,10 @@
  * @license CC0-1.0: https://creativecommons.org/publicdomain/zero/1.0/
  */
 
+namespace Typeset;
+
+use phpQuery;
+
 class Typeset
 {
     /**
@@ -144,9 +148,6 @@ class Typeset
         if (empty($input)) {
             return;
         }
-
-        // Pull in phpQuery
-        require_once __DIR__ . '/phpQuery/phpQuery.php';
 
         // Loop through each module, passing the input to it for processing.
         // Unlike Typeset.js, our modules are currently methods of this class.

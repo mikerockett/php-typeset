@@ -14,15 +14,21 @@ Powered by [phpQuery](https://github.com/electrolinux/phpquery), this port for P
 
 See inside the class for more information.
 
-### Usage
+### Installation & Usage
 
-This hasn't been uploaded to Packagist. For now, simply use this to import the package:
+You'll need Composer to get started with Typeset:
+
+Run `composer require rockett/php-typeset` or download the library and run `composer install` to get the phpQuery dependency.
 
 ```php
-require_once 'Typeset.php';
+// Require the autoloader:
+require_once __DIR__ . 'vendor/autoload.php';
+
+// Use the class (or use the full class reference when creating an instance):
+use Typeset\Typeset;
 ```
 
-Create a new Typeset object. Note that `hanging_punctuation` and `capitals_numbers` is disabled by default, for performance reasons, and `simple_math` is disabled as it is experimental. You can also opt to ignore specific elements by means of a CSS selector, and, where available, disable certain aspects of specific modules.
+**Create a new Typeset instance.** Note that `hanging_punctuation` and `capitals_numbers` is disabled by default, for performance reasons, and `simple_math` is disabled as it is experimental. Ligatures have also been disabled as browsers now do this for us. You can, however, enable it if you wish. You can also opt to ignore specific elements by means of a CSS selector, and, where available, disable certain aspects of specific modules.
 
 ```php
 $typeset = new Typeset(); // or
@@ -30,14 +36,19 @@ $typeset = new Typeset(); // or
 $typeset = new Typeset([]); // to enable all features, or
 
 $typeset = new Typeset([
+
 	// Disable a module; overrides the default (see __construct):
     'disable' => ['hanging_punctuation'],
+
     // Don't allow Typeset to process any of these:
     'ignore' => '.skip, #anything, .which-matches',
+
     // Disable number-wrapping in the capitals_numbers module:
     'capitals_numbers' => ['disable_numbers'],
+
     // Turn off specific symbol conversions
     'symbols' => ['disable_numero', 'disable_interrobang', 'disable_silcrow'],
+
 ]);
 ```
 
