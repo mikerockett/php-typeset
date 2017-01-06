@@ -16,7 +16,7 @@ This hasn't been uploaded to Packagist. For now, simply use this to import the p
 require_once 'Typeset.php';
 ```
 
-Create a new Typeset object. Note that `hanging_punctuation` and `capitals_numbers` is disabled by default, for performance reasons. You can also opt to ignore specific elements by means of a CSS selector.
+Create a new Typeset object. Note that `hanging_punctuation` and `capitals_numbers` is disabled by default, for performance reasons, and `simple_math` is disabled as it is experimental. You can also opt to ignore specific elements by means of a CSS selector, and, where available, disable certain aspects of specific modules.
 
 ```php
 $typeset = new Typeset(); // or
@@ -24,18 +24,22 @@ $typeset = new Typeset(); // or
 $typeset = new Typeset([]); // to enable all features, or
 
 $typeset = new Typeset([
-    'disable' => ['hanging_punctuation'], // array to disable a module, or
-    'ignore' => '.skip, #anything, .which-matches', // to ignore elements, or
-    'capitals_numbers' => ['disable_numbers'], // disable numbers in the capitals_numbers module.
+	// Disable a module; overrides the default (see __construct):
+    'disable' => ['hanging_punctuation'],
+    // Don't allow Typeset to process any of these:
+    'ignore' => '.skip, #anything, .which-matches',
+    // Disable number-wrapping in the capitals_numbers module:
+    'capitals_numbers' => ['disable_numbers'],
 ]);
 ```
 
-(Optional) Rename the classes that Typeset gives to `span` elements:
+Rename the classes that Typeset gives to `span` elements (optional):
 
 ```php
 $typeset->classCapitals = 'small-caps'; // default: 'capitals'
 $typeset->classNumber = 'numerics'; // default: 'number'
-$typeset->classOrdinal = 'ord'; // default: 'ordinal'
+$typeset->classOrdinal = 'ord'; // default: 'ordinal'; set blank to remove class
+$typeset->classExponent = 'exp'; // default: 'exponent'; set blank to remove class
 ```
 
 And *GO!*

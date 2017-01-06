@@ -92,6 +92,12 @@ class Typeset
     public $classOrdinal = 'ordinal';
 
     /**
+     * Exponent CSS class
+     * @var string
+     */
+    public $classExponent = 'exponent';
+
+    /**
      * Current ignore rule
      * @var string
      */
@@ -495,7 +501,11 @@ class Typeset
     {
         $text = preg_replace('/(\d+)\s?x\s?(\d+)/', "$1 × $2", $text);
         $text = preg_replace('/(\d+)\s?\/\s?(\d+)/', "$1 ÷ $2", $text);
-        $text = preg_replace('/\b(\d+)\^(\w+)\b/xu', "$1<sup>$2</sup>", $text);
+        $text = preg_replace(
+            '/\b(\d+)\^(\w+)\b/xu',
+            sprintf('$1<sup%s>$2</sup>', empty($this->classExponent) ? '' : ' class="' . $this->classExponent . '"'),
+            $text
+        );
 
         return $text;
     }
