@@ -25,7 +25,7 @@
  *     by Bram Stein: https://github.com/bramstein/hypher
  *
  * @author Mike Rockett: https://github.com/mikerockett
- * @license MIT: https://mit-license.org/
+ * @license CC0-1.0: https://creativecommons.org/publicdomain/zero/1.0/
  *
  * Usage: ----------------------------------------------------------------------------
  *
