@@ -25,7 +25,8 @@ $typeset = new Typeset([]); // to enable all features, or
 
 $typeset = new Typeset([
     'disable' => ['hanging_punctuation'], // array to disable a module, or
-    'ignore' => '.skip, #anything, .which-matches', // to ignore elements.
+    'ignore' => '.skip, #anything, .which-matches', // to ignore elements, or
+    'capitals_numbers' => ['disable_numbers'], // disable numbers in the capitals_numbers module.
 ]);
 ```
 
