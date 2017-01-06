@@ -114,7 +114,9 @@ class Typeset
      * @param array $options
      */
     public function __construct($options = ['disable' => [
-        'hanging_punctuation', 'capitals_numbers', 'simple_math'
+        'capitals_numbers',
+        'hanging_punctuation',
+        'simple_math',
     ]])
     {
         // Merge the new options with the default options
@@ -269,7 +271,11 @@ class Typeset
             if ($isAcronym($word)) {
                 $wrapWord('classCapitals');
             } else if (ctype_digit(str_replace(['.'], '', $word))) {
-                $wrapWord('classNumber');
+                if (isset($this->options->capitals_numbers) &&
+                    is_array($this->options->capitals_numbers) &&
+                    !in_array('disable_numbers', $this->options->capitals_numbers, true)) {
+                    $wrapWord('classNumber');
+                }
             }
 
         }
@@ -487,8 +493,8 @@ class Typeset
      */
     protected function doSimpleMath($text)
     {
-        $text = preg_replace('/(\d+)\s?x\s?(\d+)?/', "$1 × $2", $text);
-        $text = preg_replace('/(\d+)\s?\/\s?(\d+)?/', "$1 ÷ $2", $text);
+        $text = preg_replace('/(\d+)\s?x\s?(\d+)/', "$1 × $2", $text);
+        $text = preg_replace('/(\d+)\s?\/\s?(\d+)/', "$1 ÷ $2", $text);
         $text = preg_replace('/\b(\d+)\^(\w+)\b/xu', "$1<sup>$2</sup>", $text);
 
         return $text;
