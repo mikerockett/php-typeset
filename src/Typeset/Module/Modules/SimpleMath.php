@@ -27,7 +27,7 @@ class SimpleMath extends AbstractModule
         $text = preg_replace('/(\d+)\s?\/\s?(\d+)/', "$1 ÷ $2", $text);
         $text = preg_replace(
             '/\b(\d+)\^(\w+)\b/xu',
-            sprintf('$1<sup%s>$2</sup>', empty($this->classExponent) ? '' : ' class="' . $this->config->exponentClass . '"'),
+            sprintf('$1<sup%s>$2</sup>', empty($this->config->exponentClass) ? '' : ' class="' . $this->config->exponentClass . '"'),
             $text
         );
 

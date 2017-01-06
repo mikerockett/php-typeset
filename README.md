@@ -52,7 +52,7 @@ $typeset = new Typeset([
     	'disable' => ['numero', 'interrobang', 'silcrow'],
     ],
 
-    // Rename the classes that each certain modules use for span elements
+    // Rename the classes that certain modules use for span elements
     'ordinals' => [
         'class' => 'ordinal',
     ],
