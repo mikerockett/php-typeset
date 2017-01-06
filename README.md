@@ -28,37 +28,43 @@ require_once __DIR__ . 'vendor/autoload.php';
 use Typeset\Typeset;
 ```
 
-**Create a new Typeset instance.** Note that `hanging_punctuation` and `capitals_numbers` is disabled by default, for performance reasons, and `simple_math` is disabled as it is experimental. Ligatures have also been disabled as browsers now do this for us. You can, however, enable it if you wish. You can also opt to ignore specific elements by means of a CSS selector, and, where available, disable certain aspects of specific modules.
+**Create a new Typeset instance:**
+
+> Note that, for performance reasons, the `HangingPunctuation` and `SmallCaps` modules are disabled by default, and the `SimpleMath` module is disabled as it is experimental. `Ligatures` is also disabled as browsers now do this for us (see the deprecation notice in the module class file). You can, however, enable it if you wish. You can also opt to ignore specific elements by means of a CSS selector, and, where available, disable certain aspects of specific modules.
 
 ```php
 $typeset = new Typeset(); // or
 
-$typeset = new Typeset([]); // to enable all features, or
+$typeset = new Typeset([
+	// Enable all modules
+	'disable' => [],
+]); // or
 
 $typeset = new Typeset([
 
-	// Disable a module; overrides the default (see __construct):
+	// Disable a module; overrides the default:
     'disable' => ['hanging_punctuation'],
 
     // Don't allow Typeset to process any of these:
     'ignore' => '.skip, #anything, .which-matches',
 
-    // Disable number-wrapping in the capitals_numbers module:
-    'capitals_numbers' => ['disable_numbers'],
-
     // Turn off specific symbol conversions
-    'symbols' => ['disable_numero', 'disable_interrobang', 'disable_silcrow'],
+    'symbols' => [
+    	'disable' => ['numero', 'interrobang', 'silcrow'],
+    ],
+
+    // Rename the classes that each certain modules use for span elements
+    'ordinals' => [
+        'class' => 'ordinal',
+    ],
+    'smallCaps' => [
+        'class' => 'small-caps',
+    ],
+    'simpleMath' => [
+        'exponentClass' => 'exponent',
+    ],
 
 ]);
-```
-
-Rename the classes that Typeset gives to `span` elements (optional):
-
-```php
-$typeset->classCapitals = 'small-caps'; // default: 'capitals'
-$typeset->classNumber = 'numerics'; // default: 'number'
-$typeset->classOrdinal = 'ord'; // default: 'ordinal'; set blank to remove class
-$typeset->classExponent = 'exp'; // default: 'exponent'; set blank to remove class
 ```
 
 And *GO!*
