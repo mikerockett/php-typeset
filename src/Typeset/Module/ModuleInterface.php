@@ -10,6 +10,16 @@ namespace Typeset\Module;
 
 interface ModuleInterface
 {
-	public function process($text, $node);
-	public function getResult();
+	/**
+	 * Fetch and return the result of the process
+	 * @return string
+	 */
+    public function getResult();
+
+    /**
+     * Process the current node
+     * @param $text
+     * @param $node
+     */
+    public function process($text, $node);
 }

@@ -37,13 +37,6 @@ class Typeset
 {
     /**
      * Modules that the input will be sent to.
-     * - 'hyphenate' removed.
-     * - 'small-caps' renamed to 'capitals_numbers' as it introduces number-wrapping
-     *     (perhaps this module can be simplified to reduce processing time...)
-     * - 'ordinals' added.
-     * - 'simple_math' added.
-     * - 'marks' added.
-     * - 'symbols' added.
      * @const array
      */
     const MODULES = [

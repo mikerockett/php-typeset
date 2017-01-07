@@ -2,4 +2,6 @@
 
 namespace Typeset\Module;
 
-class ModuleException extends \Exception {}
+class ModuleException extends \Exception
+{
+}
