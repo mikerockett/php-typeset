@@ -32,8 +32,8 @@ class Punctuation extends AbstractModule
     {
         // we should probably use uchr() for this
         $text = str_replace(
-            ['--', ' – ', '...'],
-            ['–', '&thinsp;&mdash;&thinsp;', '&hellip;'],
+            ['--', ' – ', ' - ', '...'],
+            ['–', '&thinsp;&mdash;&thinsp;', '&#8202;&mdash;&#8202;', '&hellip;'],
             $text
         );
 

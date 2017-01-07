@@ -111,7 +111,7 @@ class HangingPunctuation extends AbstractModule
      * @param  $content
      * @return string
      */
-    protected function wrapSpan($type, $class, $content)
+    protected function wrapSpan($type, $class, $content = '')
     {
         return sprintf(
             '<span class="%s-%s">%s</span>',
