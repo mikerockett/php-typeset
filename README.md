@@ -80,7 +80,7 @@ On the to-do list:
 
 - [Dewidowing](https://github.com/davidmerfield/Typeset/issues/34)
 - Explore the possibility of switching to an HTML5-compatible parser. At this time, only [one](https://github.com/Masterminds/html5-php) appears to be worthy. This would require a change in architecture as the process for replacing nodes/data thereof would change.
-- See what can be done to improve performance (speed is the current issue). At this point, `preg_replace` seems to be a culprit in a few modules. Perhaps we could use some sort of `str_replace` trickery or perhaps a string tokeniser (not familiar with such; just sprung to mind). [Refer: #1]
+- See what can be done to improve performance (speed is the current issue). At this point, `preg_replace` seems to be a culprit in a few modules. Perhaps we could use some sort of `str_replace` trickery or perhaps a string tokeniser (not familiar with such; just sprung to mind). (Refer: [#1](/mikerockett/php-typeset/issues/1))
 - Check order of modules — seems to be okay in current form. Some modules *could* be merged with others and renamed accordingly. Then certain parts of these merged modules could be disabled by config.
 - Tests! Please don’t use in production (unless you trust me) until the tests are up. Once they are up, I’ll start a semver release pattern.
 
