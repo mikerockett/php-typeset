@@ -4,7 +4,7 @@
 
 PHP Typeset is a port of **[Typeset](https://github.com/davidmerfield/Typeset)** for JavaScript to PHP. Typeset is an HTML pre-processor for web typography. It provides correct quotation substitution, small-caps conversion, hyphenation, basic ligatures, hanging-punctuation, space substitution, and more.
 
-Powered by [phpQuery](https://github.com/electrolinux/phpquery), this port for PHP 5.4+ retains all features, excluding hyphenation, which should be left up to the browser due to performance issues (it's recommended that you use **[Hypher](https://github.com/bramstein/hypher)** by Bram Stein as an alternative) and optical margin alignment (David disabled this in the JS version due to accessibility issues). It introduces the following modules:
+Powered by [phpQuery](https://github.com/electrolinux/phpquery), this port for PHP 5.4+ retains all features, excluding hyphenation, which should be left up to the browser due to performance issues (it’s recommended that you use **[Hypher](https://github.com/bramstein/hypher)** by Bram Stein as an alternative) and optical margin alignment (David disabled this in the JS version due to accessibility issues). It introduces the following modules:
 
 - Simple math conversion (multiplication, division, exponents) (disabled by default)
 - Ordinal wrapping (1st, 2nd ...)
@@ -15,7 +15,7 @@ See inside the class for more information.
 
 ### Installation & Usage
 
-You'll need Composer to get started with Typeset:
+You’ll need Composer to get started with Typeset:
 
 Run `composer require rockett/php-typeset:dev-master` (no version-release as yet) or download the library and run `composer install` to get the phpQuery dependency.
 
@@ -76,15 +76,13 @@ $html = $typeset->typeset($html);
 
 **In ALPHA, PHP Typeset is currently under development, and is subject to change.**
 
-Additionally, when changes are made to the JS version of Typeset, they will be mirrored here, if possible. The following JS to-do items will also be incorporated here when implemented:
+On the to-do list:
 
-- [Dewidowing](https://github.com/davidmerfield/Typeset/issues/34), *may* be implemented before David implements it.
-- Remove recursion from `nodes()`. I'm not incredibly familiar with DOM-traversal, and so I'll leave this up to David.
-
-Lastly:
-
-- There is no CLI access... yet.
-- Tests are forthcoming. Please don't use in production (unless you trust me) until the tests are up.
+- [Dewidowing](https://github.com/davidmerfield/Typeset/issues/34)
+- Explore the possibility of switching to an HTML5-compatible parser. At this time, only [one](https://github.com/Masterminds/html5-php) appears to be worthy. This would require a change in architecture as the process for replacing nodes/data thereof would change.
+- See what can be done to improve performance (speed is the current issue). At this point, `preg_replace` seems to be a culprit in a few modules. Perhaps we could use some sort of `str_replace` trickery or perhaps a string tokeniser (not familiar with such; just sprung to mind). [Refer: #1]
+- Check order of modules — seems to be okay in current form. Some modules *could* be merged with others and renamed accordingly. Then certain parts of these merged modules could be disabled by config.
+- Tests! Please don’t use in production (unless you trust me) until the tests are up. Once they are up, I’ll start a semver release pattern.
 
 ### License
 
