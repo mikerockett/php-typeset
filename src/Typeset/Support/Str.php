@@ -10,11 +10,11 @@ class Str
      */
     public static function isAcronym($word)
     {
+        $punctuation = '/[\.,-\/#!$%\^&\*;–?:+|@\[\]{}=\-_`~(′°)]/';
         return (
-            strlen($word) &&
-            strlen(trim($word)) > 1 &&
-            !preg_match('/^\d+$/', preg_replace('/[\.,-\/#!–$%°\^&\*;?:+′|@\[\]{}=\-_`~()]/', '', $word)) &&
-            preg_replace('/[\.,-\/#!$%\^&\*;–?:+|@\[\]{}=\-_`~(′°)]/', '', $word) === $word &&
+            strlen($word) && strlen(trim($word)) > 1 &&
+            !preg_match('/^\d+$/', preg_replace($punctuation, '', $word)) &&
+            preg_replace($punctuation, '', $word) === $word &&
             strcmp(strtoupper($word), $word) === 0
         );
     }
