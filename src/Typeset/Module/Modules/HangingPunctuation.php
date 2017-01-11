@@ -52,7 +52,7 @@ class HangingPunctuation extends AbstractModule
                         if (isset($words[$index - 1])) {
                             $words[$index - 1] = $words[$index - 1] . $this->wrapSpan('push', $type);
                         } else if ($this->hasAdjacentText($node)) {
-                            $insert = $span('push', $type) . $insert;
+                            $insert = $this->wrapSpan('push', $type) . $insert;
                         }
 
                         $words[$index] = $insert . substr($word, strlen($$widthChar));

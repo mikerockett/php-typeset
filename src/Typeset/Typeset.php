@@ -44,13 +44,19 @@ class Typeset
         'Marks',
         'Symbols', // default: off
         'SmallCaps', // default: off
-        'Ligatures', // default: off
         'Punctuation',
         'HangingPunctuation', // default: off
         'SimpleMath', // default: off
         'Ordinals',
         'Spaces',
+        'Ligatures', // default: off
     ];
+
+    /**
+     * Used to identify text nodes
+     * @const int
+     */
+    const NODE_TEXT = 3;
 
     /**
      * Config assigned to an instance of Typeset.
@@ -58,12 +64,12 @@ class Typeset
      * @var array --> stdClass
      */
     protected $config = [
-        'disable' => [
-            'SmallCaps',
-            'HangingPunctuation',
-            'Ligatures',
-            'SimpleMath',
-            'Symbols',
+        'modules' => [
+            'Marks',
+            'Ordinals',
+            'Punctuation',
+            'Quotes',
+            'Spaces',
         ],
         'ignore' => [],
         'ordinals' => [
@@ -96,7 +102,37 @@ class Typeset
     public function __construct($config = [])
     {
         // Merge the new config with the default config
-        $this->config = (object) array_merge($this->config, $config);
+        // We use recursive to ensure sub-config values are
+        // explicitly overwritten.
+        $this->config = (object) array_merge_recursive($this->config, $config);
+
+        // However, the modules array should completely overwrite
+        // the default, provided it it a non-empty array.
+        // Unlike Typeset.js, this is only an opt-in list.
+        if (isset($config['modules']) && is_array($config['modules']) &&
+            !empty($config['modules'])) {
+            $this->config->modules = $config['modules'];
+        }
+    }
+
+    /**
+     * Disable one or more modules after instantiation.
+     * @param  $modules
+     * @return bool
+     */
+    public function disable($modules)
+    {
+        return $this->toggle($modules, false);
+    }
+
+    /**
+     * Enable one or more modules after instantiation.
+     * @param  $modules
+     * @return bool
+     */
+    public function enable($modules)
+    {
+        return $this->toggle($modules, true);
     }
 
     /**
@@ -111,7 +147,7 @@ class Typeset
         }
 
         pq($node)->contents()->each(function ($childNode) {
-            if ($childNode->nodeType === 3) {
+            if ($childNode->nodeType === self::NODE_TEXT) {
                 $text = $this->_escape($childNode->data);
                 $text = str_replace(['&#39;', '&quot;'], ["'", '"'], $text);
                 $childNode->data = $text;
@@ -119,7 +155,10 @@ class Typeset
                 if (!isset($this->config->{$moduleConfig})) {
                     $this->config->{$moduleConfig} = (object) [];
                 }
-                $module = ModuleFactory::createModule($this->module, (object) $this->config->{$moduleConfig});
+                $module = ModuleFactory::createModule(
+                    $this->module,
+                    (object) $this->config->{$moduleConfig}
+                );
                 $module->process($text, $childNode);
                 pq($childNode)->replaceWith($module->getResult());
             } else {
@@ -141,19 +180,16 @@ class Typeset
         }
 
         // Loop through each module, passing the input to it for processing.
-        // Unlike Typeset.js, our modules are currently methods of this class.
         foreach (self::MODULES as $module) {
             // Check against the list of modules to disable
-            if (isset($this->config->disable) &&
-                is_array($this->config->disable) &&
-                in_array($module, $this->config->disable, true)) {
-                continue;
+            if (isset($this->config->modules) &&
+                is_array($this->config->modules) &&
+                in_array($module, $this->config->modules, true)) {
+                // Set the current module
+                $this->module = $module;
+                // Process nodes through this module
+                $input = $this->nodes($input);
             }
-
-            $this->module = $module;
-
-            // If we're good to go, then process...
-            $input = $this->nodes($input);
         }
 
         return $input;
@@ -200,5 +236,24 @@ class Typeset
         $processed = $document->contents()->each([$this, 'textNodes']);
 
         return $processed[0] ? $processed : $input;
+    }
+
+    /**
+     * Toggle module states. Used by enable() and disable().
+     * Returns true if successful.
+     * @param $modules
+     * @param $enable
+     * @return bool
+     */
+    protected function toggle($modules, $enable = true)
+    {
+        if (is_string($modules) && !empty($modules)) {
+            $modules = [$modules];
+        }
+
+        $method = ($enable === true) ? 'array_merge' : 'array_diff';
+        $this->config->modules = $method($this->config->modules, $modules);
+
+        return (bool) empty(array_intersect($modules, $this->config->modules)) !== $enable;
     }
 }

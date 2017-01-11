@@ -11,7 +11,20 @@ Powered by [phpQuery](https://github.com/electrolinux/phpquery), this port for P
 - Conversion of parenthesised marks to their proper equivalents (© ℗ ® ℠ ™)
 - Basic symbol conversion (numero №, silcrow/section §, interrobang ‽) (disabled by default)
 
-See inside the class for more information.
+**This is the complete list of available modules:**
+
+Name | Description | Default
+---|---|---
+Quotes | Handles correct replacement of straight-quotation-marks, converting them to their correct, contextual equivalents. Processes for double quotes, single quotes, and then those that remain are converted to either single or double primes. Allows for straight quotes to be escaped for preservation. | On
+Marks | Converts parenthesised marks to their proper equivalents. Processes for copyright, sound-recording copyright, registered trademark, serice mark, and trademark symbols. | On
+Symbols | Symbol conversion. Processes for interrobangs, numeros, and silcrows). | Off
+SmallCaps | Wraps abbreviations and acronyms in `span` elements for CSS styling. | Off
+Punctuation | Convert hypens and double hyphens to dashes, and triple-periods to ellipses. Insert a non-breaking-space before and after specific punctuation marks. This module has similarities to the Symbols module, and may be merged in the future. | On
+HangingPunctuation | Wrap hanging punctuation in `span` elements for CSS styling. Processes for single and double quotation-marks. | Off
+SimpleMath | Experimental: Very simple equation formatters. | Off
+Ordinals | Wrap ordinal suffixes in `sup` elements. | On
+Spaces | Use thin spaces around division and multiplication signs and forward slashes. | On
+Ligatures | Convert common ligatures in the case that a font does not display them normally. **Deprecation Notice:** This module will be removed in a future release. Browsers support ligatures in a proper manner. These ligatures are not available in all fonts, and so usage of this module is discouraged. | Off
 
 ### Installation & Usage
 
@@ -27,22 +40,40 @@ require_once __DIR__ . 'vendor/autoload.php';
 use Typeset\Typeset;
 ```
 
-**Create a new Typeset instance:**
-
-> Note that, for performance reasons, the `HangingPunctuation` and `SmallCaps` modules are disabled by default, and the `SimpleMath` module is disabled as it is experimental. `Ligatures` is also disabled as browsers now do this for us (see the deprecation notice in the module class file). You can, however, enable it if you wish. You can also opt to ignore specific elements by means of a CSS selector, and, where available, disable certain aspects of specific modules.
+**Create a new Typeset instance:** Optionally, you can pass a configuration array to the constructor, which uses an explicit opt-in and override pattern. This means that Typeset will use the modules enabled by default unless you specify a `modules` key with the modules you wish to enable.
 
 ```php
+// Set defaults
 $typeset = new Typeset(); // or
+```
 
+```php
+// Only enable specific modules
 $typeset = new Typeset([
-	// Enable all modules
-	'disable' => [],
+	'modules' => ['Quotes', 'Punctuation', 'HangingPunctuation'],
 ]); // or
+```
 
+```php
+// Enable all modules
 $typeset = new Typeset([
+    'modules' => Typeset::MODULES,
+]);
+```
 
-	// Disable a module; overrides the default:
-    'disable' => ['HangingPunctuation'],
+Alternatiely, you can enable and disable modules using the `enable($module)` and `disable($module)` methods, passing the name of the module as the argument. You can also pass an array to either of these methods to toggle multiple modules at once. Both methods will gracefully ignore modules that do not require a state-change (already disabled/enabled).
+
+```php
+$typeset->disable('HangingPunctuation');
+$typeset->enable('Symbols');
+$typeset->enable(['Marks', 'Ordinals']);
+```
+
+In terms of options, these will not change unless they are directly overriden.
+
+```php
+// Options:
+$typeset = new Typeset([
 
     // Don't allow Typeset to process any of these:
     'ignore' => '.skip, #anything, .which-matches',
@@ -54,13 +85,13 @@ $typeset = new Typeset([
 
     // Rename the classes that certain modules use for span elements
     'ordinals' => [
-        'class' => 'ordinal',
+        'class' => 'ordinal-suffix', // default = ordinal
     ],
     'smallCaps' => [
-        'class' => 'small-caps',
+        'class' => 'acronym', // default = small-caps
     ],
     'simpleMath' => [
-        'exponentClass' => 'exponent',
+        'exponentClass' => 'exp', // default = exponent
     ],
 
 ]);
