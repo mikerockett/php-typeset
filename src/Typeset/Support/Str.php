@@ -20,10 +20,10 @@ class Str
     }
 
     /**
-     * Remove cruft (unwanted characters or pieces) from a word
+     * Split cruft (unwanted characters or pieces) into an array.
      * @param $word
      */
-    public static function removeCruft($word)
+    public static function splitCruft($word)
     {
         $ignore = array_merge(preg_split("//u", "{}()-‘’[]!#$*&;:,.“”″′‘’\"'°", -1, PREG_SPLIT_NO_EMPTY), ['&quot;', "'s", "’s", '&#39;s']);
         $encodedIgnore = $ignore;

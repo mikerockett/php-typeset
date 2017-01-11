@@ -24,7 +24,7 @@ class SmallCaps extends AbstractModule
         $wordList = explode(' ', $text);
 
         foreach ($wordList as $index => $word) {
-            $brokenWord = Str::removeCruft($word);
+            $brokenWord = Str::splitCruft($word);
             $word = $brokenWord[1];
 
             if (Str::isAcronym($word)) {
