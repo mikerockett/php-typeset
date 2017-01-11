@@ -117,22 +117,26 @@ class Typeset
 
     /**
      * Disable one or more modules after instantiation.
+     * Returns true of $modules matches result.
      * @param  $modules
      * @return bool
      */
     public function disable($modules)
     {
-        return $this->toggle($modules, false);
+        return $this->toggle($modules, false) ===
+            (is_string($modules) ? [$modules] : $modules);
     }
 
     /**
      * Enable one or more modules after instantiation.
+     * Returns true of $modules matches result.
      * @param  $modules
      * @return bool
      */
     public function enable($modules)
     {
-        return $this->toggle($modules, true);
+        return $this->toggle($modules, true) ===
+            (is_string($modules) ? [$modules] : $modules);
     }
 
     /**
@@ -148,7 +152,7 @@ class Typeset
 
         pq($node)->contents()->each(function ($childNode) {
             if ($childNode->nodeType === self::NODE_TEXT) {
-                $text = $this->_escape($childNode->data);
+                $text = $this->escape($childNode->data);
                 $text = str_replace(['&#39;', '&quot;'], ["'", '"'], $text);
                 $childNode->data = $text;
                 $moduleConfig = lcfirst($this->module);
@@ -200,7 +204,7 @@ class Typeset
      * @param  $text
      * @return string
      */
-    protected function _escape($text)
+    protected function escape($text)
     {
         return str_replace(
             ['&', '<', '>'],
@@ -240,10 +244,10 @@ class Typeset
 
     /**
      * Toggle module states. Used by enable() and disable().
-     * Returns true if successful.
+     * Returns array of enabled/disable modules.
      * @param $modules
      * @param $enable
-     * @return bool
+     * @return array
      */
     protected function toggle($modules, $enable = true)
     {
@@ -251,9 +255,17 @@ class Typeset
             $modules = [$modules];
         }
 
-        $method = ($enable === true) ? 'array_merge' : 'array_diff';
-        $this->config->modules = $method($this->config->modules, $modules);
+        if ($enable) {
+            // Union to enable
+            $this->config->modules = $this->config->modules + $modules;
+            $result = array_intersect($this->config->modules, $modules);
+        } else {
+            // Diff to disable
+            $this->config->modules = array_diff($this->config->modules, $modules);
+            $result = array_diff($modules, $this->config->modules);
+        }
 
-        return (bool) empty(array_intersect($modules, $this->config->modules)) !== $enable;
+        // Return values to match $modules
+        return array_values($result);
     }
 }
