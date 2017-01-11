@@ -24,13 +24,13 @@ class SmallCaps extends AbstractModule
         $wordList = explode(' ', $text);
 
         foreach ($wordList as $index => $word) {
-            $brokenWord = Str::splitCruft($word);
-            $word = $brokenWord[1];
+            $wordParts = Str::splitCruft($word);
+            list($leading, $word, $trailing) = $wordParts;
 
             if (Str::isAcronym($word)) {
                 $wordList[$index] = sprintf(
                     '%s<span class="%s">%s</span>%s',
-                    $brokenWord[0], $this->config->class, $word, $brokenWord[2]
+                    $leading, $this->config->class, $word, $trailing
                 );
             }
         }
