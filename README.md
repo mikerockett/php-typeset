@@ -111,6 +111,11 @@ $typeset = new Typeset([
         'exponentClass' => 'exp', // default = exponent
     ],
 
+    // Other module-specific properties
+    'quotes' => [
+        'primes' => true, // turn this off if a font does not include primes
+    ]
+
 ]);
 ```
 
