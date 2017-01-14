@@ -78,10 +78,16 @@ $typeset = new Typeset([
         // Use custom HTML5 elements instead of span elements.
         // Ex: <span class="small-caps"></span>
         // ->  <small-caps></small-caps>
+        //
         // This property is set to 'span' by default.
+        // You can use any tag-name you like, but ensure
+        // it contains a hyphen, in terms of the spec.
+        // Ex: 'ts-wrap'
+        //
         // When blank, Typeset uses the class name as
-        // the element name.
-        'spanElement => '',
+        // the element name instead of adding the class
+        // attribute to the element.
+        'spanElement' => '',
     ],
 
     // Don't allow Typeset to process any of these:
