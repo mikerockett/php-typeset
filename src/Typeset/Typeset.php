@@ -48,8 +48,8 @@ class Typeset
         'Quotes',
         'Marks',
         'HangingPunctuation', // default: off
-        'SmallCaps', // default: off
         'Symbols', // default: off
+        'SmallCaps', // default: off
         'Punctuation',
         'SimpleMath', // default: off
         'Ordinals',
