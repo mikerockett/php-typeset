@@ -26,9 +26,9 @@ class Str
         'prime' => '2032', // ′
         'quot' => '0022', // "
         'rdquo' => '201D', // ”
-        'reg' => '2117', // ®
+        'reg' => '00AE', // ®
         'rsquo' => '2019', // ’
-        'scopy' => '24C7', // ℗
+        'scopy' => '2117', // ℗
         'shyphen' => '00AD', // soft hyphen
         'silcrow' => '00A7', // §
         'smark' => '2120', // SM
