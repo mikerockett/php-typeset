@@ -23,6 +23,9 @@ class Quotes extends AbstractModule
     const ABBREVIATED_YEARS =
         '/(\x{2018})([0-9]{2}[^\x{2019}]*)(\x{2018}([^0-9]|$)|$|\x{2019}[a-z])/iu';
 
+    const CORRECT_N =
+        '/(?!\s)(\x{2018})(n)(\x{2019})(?=\s)/u';
+
     const BACKWARDS_APOSTROPHE =
         '/(\B|^)\x{2018}(?=([^\x{2019}]*\x{2019}\b)*([^\x{2019}\x{2018}]*\W[\x{2019}\x{2018}]\b|[^\x{2019}\x{2018}]*$))/iu';
 
@@ -102,6 +105,7 @@ class Quotes extends AbstractModule
             self::SINGLE_QUOTE_CONJUNCTION_POSSESSION,
             self::SINGLE_QUOTE_END,
             self::ABBREVIATED_YEARS,
+            self::CORRECT_N,
             self::BACKWARDS_APOSTROPHE,
             self::TRIPLE_PRIME,
             self::DOUBLE_PRIME,
@@ -117,7 +121,8 @@ class Quotes extends AbstractModule
             "$1" . Str::uchr("lsquo") . "$2",
             "$1" . Str::uchr("rsquo") . "$2",
             "$1" . Str::uchr("rsquo") . "$3",
-            Str::uchr("rsquo") . "$2$3",
+            Str::uchrs(['zwsp', 'rsquo']) . "$2$3", //  zwsp prevents HanginPunctuation
+            Str::uchrs(['zwsp', 'rsquo']) . "$2$3", // from wrapping these
             "$1" . Str::uchr("rsquo"),
             Str::uchr("tprime"), // switch to str_replace?
             Str::uchr("dprime"),
