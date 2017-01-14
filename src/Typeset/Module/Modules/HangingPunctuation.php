@@ -43,7 +43,10 @@ class HangingPunctuation extends AbstractModule
         ];
 
         // Create and array of distinct words.
-        $words = mb_split('\s', $text);
+        // mb_split accepts all kinds of whitespace,
+        // which breaks nbsp usage. Using explode instead.
+        $words = explode(' ', $text);
+        // $words = mb_split('\s', $text);
 
         // Iterate through each word ...
         foreach ($words as $index => $word) {

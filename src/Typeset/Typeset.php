@@ -89,6 +89,9 @@ class Typeset
         'simpleMath' => [
             'exponentClass' => 'exponent',
         ],
+        'quotes' => [
+            'primes' => true, // turn this off if a font does not include primes
+        ]
     ];
 
     /**

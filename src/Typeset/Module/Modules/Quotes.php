@@ -68,6 +68,9 @@ class Quotes extends AbstractModule
     const TRIPLE_PRIME =
         '/\'\'\'/';
 
+    const PRIME_FIX =
+        '/(\x{2032})\s([\d.]+\x{2033})/u';
+
     /**
      * @param  $text
      * @param  $node
@@ -107,9 +110,6 @@ class Quotes extends AbstractModule
             self::ABBREVIATED_YEARS,
             self::CORRECT_N,
             self::BACKWARDS_APOSTROPHE,
-            self::TRIPLE_PRIME,
-            self::DOUBLE_PRIME,
-            self::SINGLE_PRIME,
             self::ESCAPED_OPEN_DOUBLE_QUOTE,
             self::ESCAPED_CLOSE_DOUBLE_QUOTE,
             self::ESCAPED_OPEN_SINGLE_QUOTE,
@@ -124,14 +124,25 @@ class Quotes extends AbstractModule
             Str::uchrs(['zwsp', 'rsquo']) . "$2$3", //  zwsp prevents HanginPunctuation
             Str::uchrs(['zwsp', 'rsquo']) . "$2$3", // from wrapping these
             "$1" . Str::uchr("rsquo"),
-            Str::uchr("tprime"), // switch to str_replace?
-            Str::uchr("dprime"),
-            Str::uchr("prime"), // switch to str_replace?
             '\"', // switch to str_replace?
             '\"', // switch to str_replace?
             "\'", // switch to str_replace?
             "\'", // switch to str_replace?
         ], $text);
+
+        if ($this->config->primes) {
+            $text = preg_replace([
+                self::TRIPLE_PRIME,
+                self::DOUBLE_PRIME,
+                self::SINGLE_PRIME,
+                self::PRIME_FIX,
+            ], [
+                Str::uchr("tprime"), // switch to str_replace?
+                Str::uchr("dprime"),
+                Str::uchr("prime"), // switch to str_replace?
+                '$1' . Str::uchr('nbsp') . '$2',
+            ], $text);
+        }
 
         return $text;
     }
