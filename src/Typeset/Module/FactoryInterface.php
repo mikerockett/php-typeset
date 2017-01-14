@@ -10,7 +10,7 @@ namespace Typeset\Module;
 
 interface FactoryInterface
 {
-	/**
+    /**
      * Create a module and throw an exception if it doesn't exist
      * @param $name
      * @param $config

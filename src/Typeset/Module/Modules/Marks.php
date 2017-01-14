@@ -21,11 +21,11 @@ class Marks extends AbstractModule
      * @var array
      */
     protected $marks = [
-        'C' => '24B8',
-        'R' => '2117',
-        'P' => '24C7',
-        'SM' => '2120',
-        'TM' => '2122',
+        'C' => 'copy',
+        'R' => 'reg',
+        'P' => 'scopy',
+        'SM' => 'smark',
+        'TM' => 'tmark',
     ];
 
     /**
@@ -41,7 +41,7 @@ class Marks extends AbstractModule
             // Replace the lower and upper mark:
             $text = str_replace([$upperMark, $lowerMark], Str::uchr($symbolCode), $text);
             // Simple 501(c) reversal:
-            $text = str_replace('501' . Str::uchr('24B8'), '501(c)', $text);
+            $text = str_replace('501' . Str::uchr('copy'), '501(c)', $text);
         }
 
         $this->result = $text;

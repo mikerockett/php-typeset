@@ -5,64 +5,38 @@ namespace Typeset\Support;
 class Str
 {
     /**
-     * Determine if a word is an acronym
-     * @param $word
+     * List of characters used throughout Typeset
+     * @var array
      */
-    public static function isAcronym($word)
-    {
-        $punctuation = '/[\.,-\/#!$%\^&\*;–?:+|@\[\]{}=\-_`~(′°)]/';
-        return (
-            strlen($word) && strlen(trim($word)) > 1 &&
-            !preg_match('/^\d+$/', preg_replace($punctuation, '', $word)) &&
-            preg_replace($punctuation, '', $word) === $word &&
-            strcmp(strtoupper($word), $word) === 0
-        );
-    }
-
-    /**
-     * Split cruft (unwanted characters or pieces) into an array.
-     * @param $word
-     */
-    public static function splitCruft($word)
-    {
-        $ignore = array_merge(preg_split("//u", "{}()-‘’[]!#$*&;:,.“”″′‘’\"'°", -1, PREG_SPLIT_NO_EMPTY), ['&quot;', "'s", "’s", '&#39;s']);
-        $encodedIgnore = $ignore;
-
-        foreach ($encodedIgnore as $key => $value) {
-            $encodedIgnore[$key] = htmlspecialchars($encodedIgnore[$key]);
-        }
-
-        $ignore = array_merge($ignore, $encodedIgnore);
-
-        $trailing = '';
-        $leading = '';
-
-        for ($i = 0; $i < count($ignore); $i++) {
-            $ignoreThis = $ignore[$i];
-            $endOfWord = substr($word, -strlen($ignoreThis));
-
-            if ($endOfWord === $ignoreThis) {
-                $trailing = $ignoreThis . $trailing;
-                $word = substr($word, 0, -strlen($ignoreThis));
-                $i = 0;
-                continue;
-            }
-        }
-
-        for ($j = 0; $j < count($ignore); $j++) {
-            $ignoreThis = $ignore[$j];
-            $startOfWord = substr($word, 0, strlen($ignoreThis));
-
-            if ($startOfWord === $ignoreThis) {
-                $leading .= $ignoreThis;
-                $word = substr($word, strlen($ignoreThis));
-                $j = 0;
-                continue;
-            }
-        }
-
-        return [$leading, $word, $trailing];
-    }
+    const ALIASES = [
+        'bdquo' => '201E', // „
+        'copy' => '24B8', // ©
+        'divide' => '00F7', // ÷
+        'dprime' => '2033', // ″
+        'ellipses' => '2026', // …
+        'emdash' => '2014', // —
+        'endash' => '2013', // –
+        'hairspace' => '200A',
+        'interrobang' => '203D', // ‽
+        'ldquo' => '201C', // “
+        'lsquo' => '2018', // ‘
+        'multiply' => '00D7', // ×
+        'nbsp' => '00A0', // non-breaking space
+        'numero' => '2116', // №
+        'prime' => '2032', // ′
+        'quot' => '0022', // "
+        'rdquo' => '201D', // ”
+        'reg' => '2117', // ®
+        'rsquo' => '2019', // ’
+        'scopy' => '24C7', // ℗
+        'shyphen' => '00AD', // soft hyphen
+        'silcrow' => '00A7', // §
+        'smark' => '2120', // SM
+        'thinspace' => '2009',
+        'tmark' => '2122', // ™
+        'tprime' => '2034', // ‴
+        'zwsp' => '200B', // zero-width space
+    ];
 
     /**
      * Obtain a unicode character by code.
@@ -70,6 +44,24 @@ class Str
      */
     public static function uchr($code)
     {
+        if (isset(self::ALIASES[$code])) {
+            $code = self::ALIASES[$code];
+        }
+
         return html_entity_decode(preg_replace('/([\da-fA-F]{4})/', '&#x$1;', $code));
+    }
+
+    /**
+     * Obtain a sequence of unicode characters by their codes.
+     * @param $codes
+     */
+    public static function uchrs($codes)
+    {
+        $result = '';
+        foreach ($codes as $code) {
+            $result .= self::uchr($code);
+        }
+
+        return $result;
     }
 }

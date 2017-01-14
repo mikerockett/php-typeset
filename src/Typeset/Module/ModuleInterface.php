@@ -10,10 +10,10 @@ namespace Typeset\Module;
 
 interface ModuleInterface
 {
-	/**
-	 * Fetch and return the result of the process
-	 * @return string
-	 */
+    /**
+     * Fetch and return the result of the process
+     * @return string
+     */
     public function getResult();
 
     /**

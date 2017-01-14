@@ -14,6 +14,7 @@
 
 namespace Typeset\Module\Modules;
 
+use phpQuery;
 use Typeset\Module\AbstractModule;
 use Typeset\Support\Str;
 
@@ -71,7 +72,7 @@ class Quotes extends AbstractModule
      */
     public function process($text, $node)
     {
-        $qnode = pq($node);
+        $qnode = phpQuery::pq($node);
         if ($qnode->is('p, blockquote') && $qnode->text() !== $text) {
             $parentText = $replace($qnode->text());
             $start = 0;
@@ -79,7 +80,7 @@ class Quotes extends AbstractModule
                 if ($parentNode === $node) {
                     return false;
                 }
-                $start += strlen(pq($parentNode)->text());
+                $start += strlen(phpQuery::pq($parentNode)->text());
             });
             $this->result = substr($parentText, $start + strlen($text));
         }
@@ -110,17 +111,17 @@ class Quotes extends AbstractModule
             self::ESCAPED_OPEN_SINGLE_QUOTE,
             self::ESCAPED_CLOSE_SINGLE_QUOTE,
         ], [
-            "$1" . Str::uchr("201c") . "$2",
-            "$1" . Str::uchr("201d") . "$2",
-            "$1" . Str::uchr("201d"),
-            "$1" . Str::uchr("2018") . "$2",
-            "$1" . Str::uchr("2019") . "$2",
-            "$1" . Str::uchr("2019") . "$3",
-            Str::uchr("2019") . "$2$3",
-            "$1" . Str::uchr("2019"),
-            Str::uchr("2034"), // switch to str_replace?
-            Str::uchr("2033"),
-            Str::uchr("2032"), // switch to str_replace?
+            "$1" . Str::uchr("ldquo") . "$2",
+            "$1" . Str::uchr("rdquo") . "$2",
+            "$1" . Str::uchr("rdquo"),
+            "$1" . Str::uchr("lsquo") . "$2",
+            "$1" . Str::uchr("rsquo") . "$2",
+            "$1" . Str::uchr("rsquo") . "$3",
+            Str::uchr("rsquo") . "$2$3",
+            "$1" . Str::uchr("rsquo"),
+            Str::uchr("tprime"), // switch to str_replace?
+            Str::uchr("dprime"),
+            Str::uchr("prime"), // switch to str_replace?
             '\"', // switch to str_replace?
             '\"', // switch to str_replace?
             "\'", // switch to str_replace?

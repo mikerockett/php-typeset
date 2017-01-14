@@ -33,6 +33,11 @@ namespace Typeset;
 use phpQuery;
 use Typeset\Module\ModuleFactory;
 
+// We need to load this in manually so that we can retain any modifications
+// made to phpQuery. This should be temporary, as the ideal alternative
+// is to switch to a parsing library with full HTML5 support.
+require_once __DIR__ . '/../../electrolinux/phpquery/phpQuery/phpQuery.php';
+
 class Typeset
 {
     /**
@@ -42,10 +47,10 @@ class Typeset
     const MODULES = [
         'Quotes',
         'Marks',
-        'Symbols', // default: off
-        'SmallCaps', // default: off
-        'Punctuation',
         'HangingPunctuation', // default: off
+        'SmallCaps', // default: off
+        'Symbols', // default: off
+        'Punctuation',
         'SimpleMath', // default: off
         'Ordinals',
         'Spaces',
@@ -72,6 +77,9 @@ class Typeset
             'Spaces',
         ],
         'ignore' => [],
+        'properties' => [
+            'spanElement' => 'span' // blank: <first-class/> instead of <span class="first-class second..."/>
+        ],
         'ordinals' => [
             'class' => 'ordinal',
         ],
@@ -102,9 +110,9 @@ class Typeset
     public function __construct($config = [])
     {
         // Merge the new config with the default config
-        // We use recursive to ensure sub-config values are
+        // Replace recursively to ensure sub-config values are
         // explicitly overwritten.
-        $this->config = (object) array_merge_recursive($this->config, $config);
+        $this->config = (object) array_replace_recursive($this->config, $config);
 
         // However, the modules array should completely overwrite
         // the default, provided it it a non-empty array.
@@ -146,25 +154,27 @@ class Typeset
      */
     public function textNodes($node)
     {
-        if (pq($node)->is($this->ignore)) {
+        if (phpQuery::pq($node)->is($this->ignore)) {
             return false;
         }
 
-        pq($node)->contents()->each(function ($childNode) {
+        phpQuery::pq($node)->contents()->each(function ($childNode) {
             if ($childNode->nodeType === self::NODE_TEXT) {
                 $text = $this->escape($childNode->data);
-                $text = str_replace(['&#39;', '&quot;'], ["'", '"'], $text);
                 $childNode->data = $text;
                 $moduleConfig = lcfirst($this->module);
                 if (!isset($this->config->{$moduleConfig})) {
-                    $this->config->{$moduleConfig} = (object) [];
+                    $this->config->{$moduleConfig} = [];
                 }
                 $module = ModuleFactory::createModule(
                     $this->module,
-                    (object) $this->config->{$moduleConfig}
+                    (object) array_merge(
+                        $this->config->{$moduleConfig},
+                        $this->config->properties
+                    )
                 );
                 $module->process($text, $childNode);
-                pq($childNode)->replaceWith($module->getResult());
+                phpQuery::pq($childNode)->replaceWith($module->getResult());
             } else {
                 $this->textNodes($childNode);
             }
@@ -207,8 +217,8 @@ class Typeset
     protected function escape($text)
     {
         return str_replace(
-            ['&', '<', '>'],
-            ['&amp;', '&lt;', '&gt;'],
+            ['&', '<', '>', '&#39;', '&quot;'],
+            ['&amp;', '&lt;', '&gt;', "'", '"'],
             $text
         );
     }
@@ -235,7 +245,6 @@ class Typeset
         $this->ignore = $ignore;
 
         // Send each node to the applicable module, starting from the root.
-        phpQuery::$debug = false;
         $document = phpQuery::newDocumentHTML($input);
         $processed = $document->contents()->each([$this, 'textNodes']);
 

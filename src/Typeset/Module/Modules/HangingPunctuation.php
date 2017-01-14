@@ -11,7 +11,10 @@
 
 namespace Typeset\Module\Modules;
 
+use phpQuery;
 use Typeset\Module\AbstractModule;
+use Typeset\Support\Str;
+use Typeset\Support\Tags;
 
 class HangingPunctuation extends AbstractModule
 {
@@ -27,12 +30,16 @@ class HangingPunctuation extends AbstractModule
         }
 
         $doubleWidth = [
-            '&quot;', '"', "“", "„", "”", "&ldquo;", "&OpenCurlyDoubleQuote;",
-            "&#8220;", "&#x0201C;", "&rdquor;", "&rdquo;", '&CloseCurlyDoubleQuote;',
-            '&#8221;', '&ldquor;', '&bdquo;', '&#8222;',
+            '"', '&quot;', '&#34;', '&#x22;',
+            Str::uchr('bdquo'), '&bdquo;', '&ldquor;', '&#8222;',
+            Str::uchr('ldquo'), '&ldquo;', '&OpenCurlyDoubleQuote;', '&#x0201c;', '&#8220;',
+            Str::uchr('rdquo'), '&rdquo;', '&CloseCurlyDoubleQuote;', '&#x201d;', '&rdquor;', '&#8221;',
         ];
         $singleWidth = [
-            "'", '&prime;', '&apos;', '&lsquo;', '&rsquo;', '‘', '’',
+            "'", '&apos;',
+            Str::uchr('lsquo'), '&lsquo;',
+            Str::uchr('prime'), '&prime;',
+            Str::uchr('rsquo'), '&rsquo;',
         ];
 
         // Create and array of distinct words.
@@ -47,15 +54,14 @@ class HangingPunctuation extends AbstractModule
                 // Iterate through each type item ...
                 foreach ($$width as $$widthChar) {
                     // Add pull span and add push span if there is adjacent text.
-                    if (substr($word, 0, strlen($$widthChar)) === $$widthChar) {
+                    if (mb_substr($word, 0, mb_strlen($$widthChar)) === $$widthChar) {
                         $insert = $this->wrapSpan('pull', $type, $$widthChar);
                         if (isset($words[$index - 1])) {
                             $words[$index - 1] = $words[$index - 1] . $this->wrapSpan('push', $type);
                         } else if ($this->hasAdjacentText($node)) {
                             $insert = $this->wrapSpan('push', $type) . $insert;
                         }
-
-                        $words[$index] = $insert . substr($word, strlen($$widthChar));
+                        $words[$index] = $insert . mb_substr($word, mb_strlen($$widthChar));
                     }
                 }
             }
@@ -65,7 +71,7 @@ class HangingPunctuation extends AbstractModule
     }
 
     /**
-     * Check f the current node has adjacent text nodes
+     * Check if the current node has adjacent text nodes
      * @param  $node
      * @return bool
      */
@@ -76,12 +82,12 @@ class HangingPunctuation extends AbstractModule
          *
          *  the nearest sibling to this text node
          *  you can have two adjacent text nodes
-         *  since they'd jsut be one node.
+         *  since they'd just be one node.
          *  however, the previous sibling could end with a text node
          *  if so, we need to add the spacer to prevent overlap
          */
 
-        $qnode = pq($node);
+        $qnode = phpQuery::pq($node);
         if ($qnode->prev() && $qnode->prev()->children() && count($qnode->prev()->children())) {
             $lastChild = substr($node->prev->children, -1)[0];
             if ($lastChild && $lastChild->type === 'text') {
@@ -113,9 +119,6 @@ class HangingPunctuation extends AbstractModule
      */
     protected function wrapSpan($type, $class, $content = '')
     {
-        return sprintf(
-            '<span class="%s-%s">%s</span>',
-            $type, $class, $content
-        );
+        return Tags::element($this->config->spanElement, $content, ["$type-$class"]);
     }
 }

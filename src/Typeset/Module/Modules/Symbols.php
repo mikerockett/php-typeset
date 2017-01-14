@@ -8,7 +8,7 @@
  * Examples:
  *     It was No. 17 on the list. => It was № 17 on the list.
  *     In S 12 of the charter, ... => In § 12 of the charter, ...
- *     Then, in S 13-54, ... => Then, in §§ 13-54, ...
+ *     Then, in S 13-54, ... => Then, in §§ 13–54, ...
  */
 
 namespace Typeset\Module\Modules;
@@ -27,10 +27,14 @@ class Symbols extends AbstractModule
     {
         // Define each symbol combination expression
         $symbols = [
-            '/(?!\s)?(?:N|n)o\.\s(\d+)/' => ['numero', Str::uchr('2116') . " $1"],
-            '/(\w+)\?\!/' => ['interrobang', "$1" . Str::uchr('203D')],
-            '/(?!\s)?(?:SS?)\s([0-9A-Z.]+[-])/' => ['silcrow', Str::uchr('00A7') . Str::uchr('00A7') . " $1"],
-            '/(?!\s)?(?:S)\s([0-9A-Z.]+[^-])/' => ['silcrow', Str::uchr('00A7') . " $1"],
+            '/(?!\s)?(?:N|n)o\.\s(\d+)/' =>
+            ['numero', Str::uchr('numero') . ' $1'],
+            '/(\w+)\?\!/' =>
+            ['interrobang', '$1' . Str::uchr('interrobang')],
+            '/(?!\s)?(?:SS?)\s([A-Z\d()\].]+)-([A-Z\d.]+)/' =>
+            ['silcrow', Str::uchrs(['silcrow', 'silcrow', 'nbsp']) . '$1' . Str::uchr('endash') . '$2'],
+            '/(?!\s)?(?:S)\s([A-Z\d()\].]+[^-])/' =>
+            ['silcrow', Str::uchrs(['silcrow', 'nbsp']) . '$1'],
         ];
 
         foreach ($symbols as $plain => $replacement) {

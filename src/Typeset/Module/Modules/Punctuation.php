@@ -16,13 +16,10 @@
 namespace Typeset\Module\Modules;
 
 use Typeset\Module\AbstractModule;
+use Typeset\Support\Str;
 
 class Punctuation extends AbstractModule
 {
-    const NBSP_PUNCTUATION_END = '/ ([\!\?:;\.,‽»])/';
-
-    const NBSP_PUNCTUATION_START = '/([«¿¡]) /';
-
     /**
      * @param  $text
      * @param  $node
@@ -30,20 +27,30 @@ class Punctuation extends AbstractModule
      */
     public function process($text, $node)
     {
-        // we should probably use uchr() for this
-        $text = str_replace(
-            ['--', ' – ', ' - ', '...'],
-            ['–', '&thinsp;&mdash;&thinsp;', '&#8202;&mdash;&#8202;', '&hellip;'],
-            $text
-        );
+        // Plain text replacements
+        $replacements = [
+            // One space after a period (browsers trim these, but this is for consistency)
+            '.  ' => '. ',
+            // double-hyphen -> em dash
+            '--' => Str::uchr('emdash'),
+            // space-wrapped em dash -> hair-space-wrapped em dash
+            ' ' . Str::uchr('emdash') . ' ' => Str::uchrs(['hairspace', 'emdash', 'hairspace']),
+            // space-wrapped single-hyphen -> hair-space-wrapped em dash
+            ' - ' => Str::uchrs(['hairspace', 'emdash', 'hairspace']),
+            // quadruple-period => period + ellipses
+            '....' => '.' . Str::uchr('ellipses'),
+            // triple-period => ellipses
+            '...' => Str::uchr('ellipses'),
+        ];
+        $text = str_replace(array_keys($replacements), array_values($replacements), $text);
 
-        $text = preg_replace([
-            self::NBSP_PUNCTUATION_START,
-            self::NBSP_PUNCTUATION_END,
-        ], [
-            "$1&nbsp;",
-            "&nbsp;$1",
-        ], $text);
+        // Expression-based replacements
+        $replacements = [
+            // Swap invalid spaces before/after specific punctuation
+            '@([«¿¡])\s+@u' => "$1" . Str::uchr('nbsp'),
+            '@\s+([\!\?:;\.,‽»])@u' => Str::uchr('nbsp') . '$1',
+        ];
+        $text = preg_replace(array_keys($replacements), array_values($replacements), $text);
 
         $this->result = $text;
     }

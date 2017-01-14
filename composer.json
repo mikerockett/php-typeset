@@ -3,9 +3,6 @@
     "description": "PHP Typeset is a port of Typeset.js to PHP.",
     "type": "library",
     "license": "CC0-1.0",
-    "require": {
-        "electrolinux/phpquery": "0.9.6"
-    },
     "autoload": {
         "psr-4": {
         	"Typeset\\": "src/Typeset"

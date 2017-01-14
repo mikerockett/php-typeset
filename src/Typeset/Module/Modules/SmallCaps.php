@@ -11,6 +11,7 @@ namespace Typeset\Module\Modules;
 
 use Typeset\Module\AbstractModule;
 use Typeset\Support\Str;
+use Typeset\Support\Tags;
 
 class SmallCaps extends AbstractModule
 {
@@ -21,20 +22,24 @@ class SmallCaps extends AbstractModule
      */
     public function process($text, $node)
     {
-        $wordList = explode(' ', $text);
+        /**
+         * Expression courtesy PHP Typography by Peter Putzer
+         * @var string
+         * @license GNU GPL 2+ (PHP Typography package)
+         *
+         * @see https://github.com/mundschenk-at/wp-typography/blob/master/php-typography/class-settings.php#L684
+         */
+        $expression = '@(?<![\w\-_' . Str::uchrs(['zwsp', 'shyphen']) . '])' .
+        '((?:[0-9]+(?:\-|_|' . Str::uchr('zwsp') . '|' . Str::uchr('shyphen') . ')*' .
+        '[A-ZÀ-ÖØ-Ý](?:[A-ZÀ-ÖØ-Ý]|[0-9]|\-|_|' . Str::uchr('zwsp') . '|' . Str::uchr('shyphen') . ')*' .
+        ')|(?:[A-ZÀ-ÖØ-Ý](?:[A-ZÀ-ÖØ-Ý]|[0-9])(?:[A-ZÀ-ÖØ-Ý]|[0-9]|\-|_|' .
+        Str::uchr('zwsp') . '|' . Str::uchr('shyphen') . ')*' .
+        '))(?![\w\-_' . Str::uchr('zwsp') . Str::uchr('shyphen') . '])@u';
 
-        foreach ($wordList as $index => $word) {
-            $wordParts = Str::splitCruft($word);
-            list($leading, $word, $trailing) = $wordParts;
-
-            if (Str::isAcronym($word)) {
-                $wordList[$index] = sprintf(
-                    '%s<span class="%s">%s</span>%s',
-                    $leading, $this->config->class, $word, $trailing
-                );
-            }
-        }
-
-        $this->result = implode(' ', $wordList);
+        $this->result = preg_replace(
+            $expression,
+            Tags::element($this->config->spanElement, '$1', [$this->config->class]),
+            $text
+        );
     }
 }

@@ -4,12 +4,14 @@
  * PHP Typeset / Spaces Module
  *
  * Use thin spaces around division and multiplication
- * signs and forward slashes.
+ * signs and forward slashes wherever they haven't
+ * already been used.
  */
 
 namespace Typeset\Module\Modules;
 
 use Typeset\Module\AbstractModule;
+use Typeset\Support\Str;
 
 class Spaces extends AbstractModule
 {
@@ -20,10 +22,10 @@ class Spaces extends AbstractModule
      */
     public function process($text, $node)
     {
-        foreach (['÷', '×', '=', '/'] as $character) {
+        foreach ([Str::uchr('divide'), Str::uchr('multiply'), '=', '/'] as $character) {
             $text = str_replace(
                 " {$character} ", // normal spaces
-                "&#8202;{$character}&#8202;", // hair spaces
+                Str::uchrs(['hairspace', $character, 'hairspace']),
                 $text
             );
         }
