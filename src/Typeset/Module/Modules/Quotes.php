@@ -79,10 +79,10 @@ class Quotes extends AbstractModule
     public function process($text, $node)
     {
         $qnode = phpQuery::pq($node);
-        if ($qnode->is('p, blockquote') && $qnode->text() !== $text) {
-            $parentText = $replace($qnode->text());
+        if ($qnode->parent()->is('p, blockquote') && $qnode->parent()->text() !== $text) {
+            $parentText = $this->doReplacements($qnode->parent()->text());
             $start = 0;
-            $qnode->contents()->each(function ($parentNode) use ($node, &$start) {
+            $qnode->parent()->contents()->each(function ($parentNode) use ($node, &$start) {
                 if ($parentNode === $node) {
                     return false;
                 }

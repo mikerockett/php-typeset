@@ -78,7 +78,8 @@ class Typeset
         ],
         'ignore' => [],
         'properties' => [
-            'spanElement' => 'span' // blank: <first-class/> instead of <span class="first-class second..."/>
+            // blank: <first-class/> instead of <span class="first-class second..."/>
+            'spanElement' => 'span'
         ],
         'ordinals' => [
             'class' => 'ordinal',
@@ -90,7 +91,17 @@ class Typeset
             'exponentClass' => 'exponent',
         ],
         'quotes' => [
-            'primes' => true, // turn this off if a font does not include primes
+            // turn this off if a font does not include primes
+            'primes' => true,
+        ],
+        'punctuation' => [
+            'features' => [
+                'dashes',
+                'numericRanges',
+                'periodsEllipses',
+                'phoneNumbers'
+            ],
+            'parentheticalDashWrapper' => 'hairspace',
         ]
     ];
 
@@ -124,6 +135,16 @@ class Typeset
             !empty($config['modules'])) {
             $this->config->modules = $config['modules'];
         }
+    }
+
+    /**
+     * Get the configuration object.
+     * This is mostly here for unit testing.
+     * @return stdClass
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 
     /**
@@ -251,7 +272,7 @@ class Typeset
         $document = phpQuery::newDocumentHTML($input);
         $processed = $document->contents()->each([$this, 'textNodes']);
 
-        return $processed[0] ? $processed : $input;
+        return $processed[0] ? (string) $processed : $input;
     }
 
     /**

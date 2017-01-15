@@ -25,7 +25,7 @@ class Spaces extends AbstractModule
         foreach ([Str::uchr('divide'), Str::uchr('multiply'), '=', '/'] as $character) {
             $text = str_replace(
                 " {$character} ", // normal spaces
-                Str::uchrs(['hairspace', $character, 'hairspace']),
+                Str::uchr('hairspace') . $character . Str::uchr('hairspace'),
                 $text
             );
         }

@@ -5,3 +5,7 @@ $RECYCLE.BIN/
 *.lnk
 compat/
 vendor/
+.phpintel/
+
+tests/
+phpunit.xml

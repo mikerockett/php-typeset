@@ -115,6 +115,22 @@ $typeset = new Typeset([
     'quotes' => [
         'primes' => true, // turn this off if a font does not include primes
     ]
+    'punctuation' => [
+        // Use these defaults or select your own.
+        // * Note that if you turn off phoneNumbers (this feature only applies
+        // to hyphenated phone numbers) and leave numericRanges on,
+        // such phone numbers may be treated as numerical ranges. It's recommended
+        // to leave both features on.
+        'features' => [
+            'dashes',
+            'numericRanges',
+            'periodsEllipses',
+            'phoneNumbers'
+        ],
+        // Set to a hairspace or thinspace,
+        // or blank/null to turn off.
+        'parentheticalDashWrapper' => 'hairspace',
+    ]
 
 ]);
 ```
@@ -137,9 +153,9 @@ On the to-do list:
   - 2017-01-14: Performance for the SmallCaps module has been improved significantly as it now uses the [same method](https://github.com/mundschenk-at/wp-typography/blob/master/php-typography/class-settings.php#L684) found in [PHP Typography](https://github.com/mundschenk-at/wp-typography/tree/master/php-typography) (GNU GPL). Several different methods were attempted, and this method landed up winning. The original method by David *may* have been faster on JS (untested), but 200-400ms on PHP is far too long.
 - Check order of modules — seems to be okay in current form. Some modules *could* be merged with others and renamed accordingly. Then certain parts of these merged modules could be disabled by config.
   - 2017-01-14: Module orders have been modified to prevent whitespace bugs relating to en/em dashes. being discarded when splitting paragraphs into arrays.
-- Tests! Please don’t use in production (unless you trust me) until the tests are up. Once they are up, I’ll start a semver release pattern.
+- Tests! Please don’t use in production (unless you trust me) until the tests are up. Once they are up, I’ll start a semver release pattern. (2017-01-15: Not ready yet, but underway.)
 
-**phpQuery** has now been included in the library itself due to several changes that needed to be made to allow for custom elements. Additionally, phpQuery has been trimmed down considerably, where unneeded features were removed. With that said, it is still essential that Typeset adopts an HTML5 parser for the future.
+2017-01-14: **phpQuery** has now been included in the library itself due to several changes that needed to be made to allow for custom elements. Additionally, phpQuery has been trimmed down considerably, where unneeded features were removed. With that said, it is still essential that Typeset adopts an HTML5 parser for the future.
 
 ### License
 
