@@ -23,11 +23,12 @@ class SmallCaps extends AbstractModule
     public function process($text, $node)
     {
         /**
-         * Expression courtesy PHP Typography by Peter Putzer
-         * @var string
+         * Expression courtesy PHP Typography
+         * @author Jeffrey D. King; Peter Putzer
          * @license GNU GPL 2+ (PHP Typography package)
-         *
          * @see https://github.com/mundschenk-at/wp-typography/blob/master/php-typography/class-settings.php#L684
+         *
+         * @var string
          */
         $expression = '@(?<![\w\-_' . Str::uchrs(['zwsp', 'shyphen']) . '])' .
         '((?:[0-9]+(?:\-|_|' . Str::uchr('zwsp') . '|' . Str::uchr('shyphen') . ')*' .
