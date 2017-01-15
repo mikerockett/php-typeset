@@ -1114,12 +1114,10 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess {
     /**
      * @access private
      */
-    protected function __pseudoClassParam($paramsString) {
-        // TODO;
-    }
+    // protected function __pseudoClassParam($paramsString) {
+    //     // TODO;
+    // }
     /**
-     * Enter description here...
-     *
      * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
      */
     public function is($selector, $nodes = null) {
@@ -1340,7 +1338,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess {
             'type' => $data ? 'POST' : 'GET',
             'data' => $data,
             'complete' => $callback,
-            'success' => array($this, '__loadSuccess')
+            'success' => array($this, '_loadSuccess')
         );
         phpQuery::ajax($ajax);
         return $this;
@@ -1350,7 +1348,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess {
      * @param $html
      * @return unknown_type
      */
-    public function __loadSuccess($html) {
+    public function _loadSuccess($html) {
         if ($this->_loadSelector) {
             $html = phpQuery::newDocument($html)->find($this->_loadSelector);
             unset($this->_loadSelector);
@@ -1505,7 +1503,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess {
         return phpQuery::pq($wrapper, $this->getDocumentID())
             ->clone()
             ->insertBefore($this->get(0))
-            ->map(array($this, '___wrapAllCallback'))
+            ->map(array($this, '_callbackWrapAll'))
             ->append($this);
     }
   /**
@@ -1514,7 +1512,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess {
      * @return unknown_type
      * @access private
    */
-    public function ___wrapAllCallback($node) {
+    public function _callbackWrapAll($node) {
         $deepest = $node;
         while($deepest->firstChild && $deepest->firstChild instanceof DOMELEMENT)
             $deepest = $deepest->firstChild;
@@ -3182,21 +3180,21 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess {
         $debug = phpQuery::$debug;
         phpQuery::$debug = false;
         foreach($this->stack() as $node)
-            $output .= $this->__dumpTree($node);
+            $output .= $this->_dumpTree($node);
         phpQuery::$debug = $debug;
         print $html
             ? nl2br(str_replace(' ', '&nbsp;', $output))
             : $output;
         return $this;
     }
-    private function __dumpTree($node, $intend = 0) {
+    private function _dumpTree($node, $intend = 0) {
         $whois = $this->whois($node);
         $return = '';
         if ($whois)
             $return .= str_repeat(' - ', $intend).$whois."\n";
         if (isset($node->childNodes))
             foreach($node->childNodes as $chNode)
-                $return .= $this->__dumpTree($chNode, $intend+1);
+                $return .= $this->_dumpTree($chNode, $intend+1);
         return $return;
     }
     /**
