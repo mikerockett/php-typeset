@@ -115,15 +115,15 @@ class Quotes extends AbstractModule
             self::ESCAPED_OPEN_SINGLE_QUOTE,
             self::ESCAPED_CLOSE_SINGLE_QUOTE,
         ], [
-            "$1" . Str::uchr("ldquo") . "$2",
-            "$1" . Str::uchr("rdquo") . "$2",
-            "$1" . Str::uchr("rdquo"),
-            "$1" . Str::uchr("lsquo") . "$2",
-            "$1" . Str::uchr("rsquo") . "$2",
-            "$1" . Str::uchr("rsquo") . "$3",
+            "$1" . Str::ldquo() . "$2",
+            "$1" . Str::rdquo() . "$2",
+            "$1" . Str::rdquo(),
+            "$1" . Str::lsquo() . "$2",
+            "$1" . Str::rsquo() . "$2",
+            "$1" . Str::rsquo() . "$3",
             Str::uchrs(['zwsp', 'rsquo']) . "$2$3", //  zwsp prevents HanginPunctuation
             Str::uchrs(['zwsp', 'rsquo']) . "$2$3", // from wrapping these
-            "$1" . Str::uchr("rsquo"),
+            "$1" . Str::rsquo(),
             '\"', // switch to str_replace?
             '\"', // switch to str_replace?
             "\'", // switch to str_replace?
@@ -137,9 +137,9 @@ class Quotes extends AbstractModule
                 self::SINGLE_PRIME,
                 self::PRIME_FIX,
             ], [
-                Str::uchr("tprime"), // switch to str_replace?
-                Str::uchr("dprime"),
-                Str::uchr("prime"), // switch to str_replace?
+                Str::tprime(), // switch to str_replace?
+                Str::dprime(),
+                Str::prime(), // switch to str_replace?
                 '$1' . Str::uchr('nbsp') . '$2',
             ], $text);
         }

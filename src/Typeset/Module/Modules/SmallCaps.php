@@ -31,11 +31,11 @@ class SmallCaps extends AbstractModule
          * @var string
          */
         $expression = '@(?<![\w\-_' . Str::uchrs(['zwsp', 'shyphen']) . '])' .
-        '((?:[0-9]+(?:\-|_|' . Str::uchr('zwsp') . '|' . Str::uchr('shyphen') . ')*' .
-        '[A-ZÀ-ÖØ-Ý](?:[A-ZÀ-ÖØ-Ý]|[0-9]|\-|_|' . Str::uchr('zwsp') . '|' . Str::uchr('shyphen') . ')*' .
+        '((?:[0-9]+(?:\-|_|' . Str::zwsp() . '|' . Str::shyphen() . ')*' .
+        '[A-ZÀ-ÖØ-Ý](?:[A-ZÀ-ÖØ-Ý]|[0-9]|\-|_|' . Str::zwsp() . '|' . Str::shyphen() . ')*' .
         ')|(?:[A-ZÀ-ÖØ-Ý](?:[A-ZÀ-ÖØ-Ý]|[0-9])(?:[A-ZÀ-ÖØ-Ý]|[0-9]|\-|_|' .
-        Str::uchr('zwsp') . '|' . Str::uchr('shyphen') . ')*' .
-        '))(?![\w\-_' . Str::uchr('zwsp') . Str::uchr('shyphen') . '])@u';
+        Str::zwsp() . '|' . Str::shyphen() . ')*' .
+        '))(?![\w\-_' . Str::zwsp() . Str::shyphen() . '])@u';
 
         $this->result = preg_replace(
             $expression,

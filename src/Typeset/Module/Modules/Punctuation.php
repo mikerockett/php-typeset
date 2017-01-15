@@ -35,8 +35,8 @@ class Punctuation extends AbstractModule
             // a valid unicode code or name is provided.
             // So we can pass null or blank to prevent wrapping.
             $dashWrapper = $this->config->parentheticalDashWrapper;
-            $emDash = Str::uchrs([$dashWrapper, 'emdash', $dashWrapper]);
-            $enDash = Str::uchrs([$dashWrapper, 'endash', $dashWrapper]);
+            $emDash = Str::emdash($dashWrapper);
+            $enDash = Str::endash($dashWrapper);
 
             // Parenthetical em dashes (triple; spaced double/single)
             $text = str_replace('---', $emDash, $text); // These are never space-wrapped (?)
@@ -46,17 +46,15 @@ class Punctuation extends AbstractModule
             // Parenthetical en dashes
             $anyLatinChar = Str::ANY_LATIN_CHAR;
             $text = str_replace('--', $enDash, $text);
-            $text = preg_replace("/(\A|\s)\-([\w|{$anyLatinChar}])/u", $enDash, $text);
-            $text = preg_replace(
-                "/([\w|{$anyLatinChar}])\-(\Z|" . Str::uchr('thinspace') . "|" .
-                Str::uchr('hairspace') . "|" . Str::uchr('nnbsp') . ")/u",
-                $enDash,
-                $text
-            );
+            $expressions = [
+            	"/(\A|\s)\-([\w|{$anyLatinChar}])/u",
+            	"/([\w|{$anyLatinChar}])\-(\Z|" . Str::thinspace() . '|' . Str::hairspace() . '|' . Str::nnbsp() . ")/u"
+            ];
+            $text = preg_replace($expressions, $enDash, $text);
         }
 
         // Internationalised domain names: revert punycode
-        $text = str_replace('xn' . Str::uchr('endash'), 'xn--', $text);
+        $text = str_replace('xn' . Str::endash(), 'xn--', $text);
 
         // Use non-breaking hyphens in phone numbers.
         //
@@ -65,8 +63,8 @@ class Punctuation extends AbstractModule
         // you think this can be improved upon. Take note, however,
         // that the objective here is to use as few preg calls as
         // possible so as to keep performance at a high.
-        $nbhyphen = Str::uchr('nbhyphen');
-        $nbsp = Str::uchr('nbsp');
+        $nbhyphen = Str::nbhyphen();
+        $nbsp = Str::nbsp();
         if (in_array('phoneNumbers', $this->config->features)) {
             // US 1-(3)-3-4
             $text = preg_replace('/\b(\d)-(\(\d{3}\)|\d{3})-(\d{3})-(\d{4})\b/', "$1{$nbhyphen}$2{$nbhyphen}$3{$nbhyphen}$4", $text);
@@ -82,7 +80,7 @@ class Punctuation extends AbstractModule
 
         // We can sort out numeric ranges now.
         if (in_array('numericRanges', $this->config->features)) {
-            $zeroWidthEnDash = Str::uchrs(['zwnbsp', 'endash', 'zwnbsp']);
+            $zeroWidthEnDash = Str::endash('zwnbsp');
             $text = preg_replace('/(?<=[\d\s]|^)-(?=[\d\s]|$)/', $zeroWidthEnDash, $text);
 
             // Now lets revert hyphenated dates - these
@@ -111,7 +109,7 @@ class Punctuation extends AbstractModule
 
         // Basic and follow-up replacements
         if (in_array('periodsEllipses', $this->config->features)) {
-            $ellipses = Str::uchr('ellipses');
+            $ellipses = Str::ellipses();
             $replacements = [
                 // One space after a period (browsers trim these, but this is for consistency)
                 '.  ' => '. ',
@@ -127,7 +125,7 @@ class Punctuation extends AbstractModule
 
         // Expression-based corrections
         $replacements = [
-            // Swap invalid spaces before/after specific punctuation
+            // Use non-breaking spaces before/after specific punctuation marks.
             '/([«¿¡])\s+/u' => "$1{$nbsp}",
             '/\s+([\!\?:;\.,‽»])/u' => "{$nbsp}$1",
         ];

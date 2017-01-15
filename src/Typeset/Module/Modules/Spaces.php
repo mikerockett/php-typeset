@@ -22,10 +22,10 @@ class Spaces extends AbstractModule
      */
     public function process($text, $node)
     {
-        foreach ([Str::uchr('divide'), Str::uchr('multiply'), '=', '/'] as $character) {
+        foreach ([Str::divide(), Str::multiply(), '=', '/'] as $character) {
             $text = str_replace(
                 " {$character} ", // normal spaces
-                Str::uchr('hairspace') . $character . Str::uchr('hairspace'),
+                Str::hairspace() . $character . Str::hairspace(),
                 $text
             );
         }

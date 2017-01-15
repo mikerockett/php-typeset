@@ -28,11 +28,11 @@ class Symbols extends AbstractModule
         // Define each symbol combination expression
         $symbols = [
             '/(?!\s)?(?:N|n)o\.\s(\d+)/' =>
-            ['numero', Str::uchr('numero') . ' $1'],
+            ['numero', Str::numero() . ' $1'],
             '/(\w+)\?\!/' =>
-            ['interrobang', '$1' . Str::uchr('interrobang')],
+            ['interrobang', '$1' . Str::interrobang()],
             '/(?!\s)?(?:SS?)\s([A-Z\d()\].]+)-([A-Z\d.]+)/' =>
-            ['silcrow', Str::uchrs(['silcrow', 'silcrow', 'nbsp']) . '$1' . Str::uchr('endash') . '$2'],
+            ['silcrow', Str::uchrs(['silcrow', 'silcrow', 'nbsp']) . '$1' . Str::endash() . '$2'],
             '/(?!\s)?(?:S)\s([A-Z\d()\].]+[^-])/' =>
             ['silcrow', Str::uchrs(['silcrow', 'nbsp']) . '$1'],
         ];

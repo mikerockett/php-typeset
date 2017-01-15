@@ -39,9 +39,9 @@ class Marks extends AbstractModule
             $upperMark = "($mark)";
             $lowerMark = strtolower($upperMark);
             // Replace the lower and upper mark:
-            $text = str_replace([$upperMark, $lowerMark], Str::uchr($symbolCode), $text);
+            $text = str_replace([$upperMark, $lowerMark], Str::$symbolCode(), $text);
             // Simple 501(c) reversal:
-            $text = str_replace('501' . Str::uchr('copy'), '501(c)', $text);
+            $text = str_replace('501' . Str::copy(), '501(c)', $text);
         }
 
         $this->result = $text;

@@ -31,15 +31,15 @@ class HangingPunctuation extends AbstractModule
 
         $doubleWidth = [
             '"', '&quot;', '&#34;', '&#x22;',
-            Str::uchr('bdquo'), '&bdquo;', '&ldquor;', '&#8222;',
-            Str::uchr('ldquo'), '&ldquo;', '&OpenCurlyDoubleQuote;', '&#x0201c;', '&#8220;',
-            Str::uchr('rdquo'), '&rdquo;', '&CloseCurlyDoubleQuote;', '&#x201d;', '&rdquor;', '&#8221;',
+            Str::bdquo(), '&bdquo;', '&ldquor;', '&#8222;',
+            Str::ldquo(), '&ldquo;', '&OpenCurlyDoubleQuote;', '&#x0201c;', '&#8220;',
+            Str::rdquo(), '&rdquo;', '&CloseCurlyDoubleQuote;', '&#x201d;', '&rdquor;', '&#8221;',
         ];
         $singleWidth = [
             "'", '&apos;',
-            Str::uchr('lsquo'), '&lsquo;',
-            Str::uchr('prime'), '&prime;',
-            Str::uchr('rsquo'), '&rsquo;',
+            Str::lsquo(), '&lsquo;',
+            Str::prime(), '&prime;',
+            Str::rsquo(), '&rsquo;',
         ];
 
         // Create and array of distinct words.
