@@ -48,7 +48,7 @@ class Str
             $code = self::ALIASES[$code];
         }
 
-        return html_entity_decode(preg_replace('/([\da-fA-F]{4})/', '&#x$1;', $code));
+        return json_decode("\"\\u{$code}\"");
     }
 
     /**
