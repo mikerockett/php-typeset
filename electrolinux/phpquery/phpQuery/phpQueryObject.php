@@ -3121,7 +3121,7 @@ class phpQueryObject implements Iterator, Countable, ArrayAccess {
                     .($node->getAttribute('id')
                         ? '#'.$node->getAttribute('id'):'')
                     .($node->getAttribute('class')
-                        ? '.'.join('.', split(' ', $node->getAttribute('class'))):'')
+                        ? '.'.join('.', explode(' ', $node->getAttribute('class'))):'')
                     .($node->getAttribute('name')
                         ? '[name="'.$node->getAttribute('name').'"]':'')
                     .($node->getAttribute('value') && strpos($node->getAttribute('value'), '<'.'?php') === false
