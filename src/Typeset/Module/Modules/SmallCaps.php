@@ -10,7 +10,7 @@
 namespace Typeset\Module\Modules;
 
 use Typeset\Module\AbstractModule;
-use Typeset\Support\Str;
+use Typeset\Support\Chr;
 use Typeset\Support\Tags;
 
 class SmallCaps extends AbstractModule
@@ -30,12 +30,12 @@ class SmallCaps extends AbstractModule
          *
          * @var string
          */
-        $expression = '@(?<![\w\-_' . Str::uchrs(['zwsp', 'shyphen']) . '])' .
-        '((?:[0-9]+(?:\-|_|' . Str::zwsp() . '|' . Str::shyphen() . ')*' .
-        '[A-ZÀ-ÖØ-Ý](?:[A-ZÀ-ÖØ-Ý]|[0-9]|\-|_|' . Str::zwsp() . '|' . Str::shyphen() . ')*' .
+        $expression = '@(?<![\w\-_' . Chr::gets(['zwsp', 'shyphen']) . '])' .
+        '((?:[0-9]+(?:\-|_|' . Chr::zwsp() . '|' . Chr::shyphen() . ')*' .
+        '[A-ZÀ-ÖØ-Ý](?:[A-ZÀ-ÖØ-Ý]|[0-9]|\-|_|' . Chr::zwsp() . '|' . Chr::shyphen() . ')*' .
         ')|(?:[A-ZÀ-ÖØ-Ý](?:[A-ZÀ-ÖØ-Ý]|[0-9])(?:[A-ZÀ-ÖØ-Ý]|[0-9]|\-|_|' .
-        Str::zwsp() . '|' . Str::shyphen() . ')*' .
-        '))(?![\w\-_' . Str::zwsp() . Str::shyphen() . '])@u';
+        Chr::zwsp() . '|' . Chr::shyphen() . ')*' .
+        '))(?![\w\-_' . Chr::zwsp() . Chr::shyphen() . '])@u';
 
         $this->result = preg_replace(
             $expression,

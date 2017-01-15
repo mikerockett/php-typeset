@@ -11,7 +11,7 @@
 namespace Typeset\Module\Modules;
 
 use Typeset\Module\AbstractModule;
-use Typeset\Support\Str;
+use Typeset\Support\Chr;
 
 class Spaces extends AbstractModule
 {
@@ -22,10 +22,10 @@ class Spaces extends AbstractModule
      */
     public function process($text, $node)
     {
-        foreach ([Str::divide(), Str::multiply(), '=', '/'] as $character) {
+        foreach ([Chr::divide(), Chr::multiply(), '=', '/'] as $character) {
             $text = str_replace(
                 " {$character} ", // normal spaces
-                Str::hairspace() . $character . Str::hairspace(),
+                Chr::hairspace() . $character . Chr::hairspace(),
                 $text
             );
         }

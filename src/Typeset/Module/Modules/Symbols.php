@@ -14,7 +14,7 @@
 namespace Typeset\Module\Modules;
 
 use Typeset\Module\AbstractModule;
-use Typeset\Support\Str;
+use Typeset\Support\Chr;
 
 class Symbols extends AbstractModule
 {
@@ -28,13 +28,13 @@ class Symbols extends AbstractModule
         // Define each symbol combination expression
         $symbols = [
             '/(?!\s)?(?:N|n)o\.\s(\d+)/' =>
-            ['numero', Str::numero() . ' $1'],
+            ['numero', Chr::numero() . ' $1'],
             '/(\w+)\?\!/' =>
-            ['interrobang', '$1' . Str::interrobang()],
+            ['interrobang', '$1' . Chr::interrobang()],
             '/(?!\s)?(?:SS?)\s([A-Z\d()\].]+)-([A-Z\d.]+)/' =>
-            ['silcrow', Str::uchrs(['silcrow', 'silcrow', 'nbsp']) . '$1' . Str::endash() . '$2'],
+            ['silcrow', Chr::gets(['silcrow', 'silcrow', 'nbsp']) . '$1' . Chr::endash() . '$2'],
             '/(?!\s)?(?:S)\s([A-Z\d()\].]+[^-])/' =>
-            ['silcrow', Str::uchrs(['silcrow', 'nbsp']) . '$1'],
+            ['silcrow', Chr::gets(['silcrow', 'nbsp']) . '$1'],
         ];
 
         foreach ($symbols as $plain => $replacement) {

@@ -13,7 +13,7 @@ namespace Typeset\Module\Modules;
 
 use phpQuery;
 use Typeset\Module\AbstractModule;
-use Typeset\Support\Str;
+use Typeset\Support\Chr;
 use Typeset\Support\Tags;
 
 class HangingPunctuation extends AbstractModule
@@ -31,15 +31,15 @@ class HangingPunctuation extends AbstractModule
 
         $doubleWidth = [
             '"', '&quot;', '&#34;', '&#x22;',
-            Str::bdquo(), '&bdquo;', '&ldquor;', '&#8222;',
-            Str::ldquo(), '&ldquo;', '&OpenCurlyDoubleQuote;', '&#x0201c;', '&#8220;',
-            Str::rdquo(), '&rdquo;', '&CloseCurlyDoubleQuote;', '&#x201d;', '&rdquor;', '&#8221;',
+            Chr::bdquo(), '&bdquo;', '&ldquor;', '&#8222;',
+            Chr::ldquo(), '&ldquo;', '&OpenCurlyDoubleQuote;', '&#x0201c;', '&#8220;',
+            Chr::rdquo(), '&rdquo;', '&CloseCurlyDoubleQuote;', '&#x201d;', '&rdquor;', '&#8221;',
         ];
         $singleWidth = [
             "'", '&apos;',
-            Str::lsquo(), '&lsquo;',
-            Str::prime(), '&prime;',
-            Str::rsquo(), '&rsquo;',
+            Chr::lsquo(), '&lsquo;',
+            Chr::prime(), '&prime;',
+            Chr::rsquo(), '&rsquo;',
         ];
 
         // Create and array of distinct words.

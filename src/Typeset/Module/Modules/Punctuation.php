@@ -18,7 +18,7 @@
 namespace Typeset\Module\Modules;
 
 use Typeset\Module\AbstractModule;
-use Typeset\Support\Str;
+use Typeset\Support\Chr;
 
 class Punctuation extends AbstractModule
 {
@@ -31,12 +31,12 @@ class Punctuation extends AbstractModule
     {
         if (in_array('dashes', $this->config->features)) {
             // First, let's decide on dash-wrapping.
-            // uchrs() will not wrap the dash unless
+            // Chr::gets() will not wrap the dash unless
             // a valid unicode code or name is provided.
             // So we can pass null or blank to prevent wrapping.
             $dashWrapper = $this->config->parentheticalDashWrapper;
-            $emDash = Str::emdash($dashWrapper);
-            $enDash = Str::endash($dashWrapper);
+            $emDash = Chr::emdash($dashWrapper);
+            $enDash = Chr::endash($dashWrapper);
 
             // Parenthetical em dashes (triple; spaced double/single)
             $text = str_replace('---', $emDash, $text); // These are never space-wrapped (?)
@@ -44,17 +44,17 @@ class Punctuation extends AbstractModule
             $text = preg_replace($this->spacedDash('single'), $emDash, $text);
 
             // Parenthetical en dashes
-            $anyLatinChar = Str::ANY_LATIN_CHAR;
+            $anyLatinChar = Chr::ANY_LATIN_CHAR;
             $text = str_replace('--', $enDash, $text);
             $expressions = [
             	"/(\A|\s)\-([\w|{$anyLatinChar}])/u",
-            	"/([\w|{$anyLatinChar}])\-(\Z|" . Str::thinspace() . '|' . Str::hairspace() . '|' . Str::nnbsp() . ")/u"
+            	"/([\w|{$anyLatinChar}])\-(\Z|" . Chr::thinspace() . '|' . Chr::hairspace() . '|' . Chr::nnbsp() . ")/u"
             ];
             $text = preg_replace($expressions, $enDash, $text);
         }
 
         // Internationalised domain names: revert punycode
-        $text = str_replace('xn' . Str::endash(), 'xn--', $text);
+        $text = str_replace('xn' . Chr::endash(), 'xn--', $text);
 
         // Use non-breaking hyphens in phone numbers.
         //
@@ -63,8 +63,8 @@ class Punctuation extends AbstractModule
         // you think this can be improved upon. Take note, however,
         // that the objective here is to use as few preg calls as
         // possible so as to keep performance at a high.
-        $nbhyphen = Str::nbhyphen();
-        $nbsp = Str::nbsp();
+        $nbhyphen = Chr::nbhyphen();
+        $nbsp = Chr::nbsp();
         if (in_array('phoneNumbers', $this->config->features)) {
             // US 1-(3)-3-4
             $text = preg_replace('/\b(\d)-(\(\d{3}\)|\d{3})-(\d{3})-(\d{4})\b/', "$1{$nbhyphen}$2{$nbhyphen}$3{$nbhyphen}$4", $text);
@@ -80,7 +80,7 @@ class Punctuation extends AbstractModule
 
         // We can sort out numeric ranges now.
         if (in_array('numericRanges', $this->config->features)) {
-            $zeroWidthEnDash = Str::endash('zwnbsp');
+            $zeroWidthEnDash = Chr::endash('zwnbsp');
             $text = preg_replace('/(?<=[\d\s]|^)-(?=[\d\s]|$)/', $zeroWidthEnDash, $text);
 
             // Now lets revert hyphenated dates - these
@@ -109,7 +109,7 @@ class Punctuation extends AbstractModule
 
         // Basic and follow-up replacements
         if (in_array('periodsEllipses', $this->config->features)) {
-            $ellipses = Str::ellipses();
+            $ellipses = Chr::ellipses();
             $replacements = [
                 // One space after a period (browsers trim these, but this is for consistency)
                 '.  ' => '. ',
@@ -142,6 +142,6 @@ class Punctuation extends AbstractModule
     protected function spacedDash($type)
     {
         $type = ($type === 'double') ? '--' : '-';
-        return "/(\s|" . Str::ALL_SPACES . "){$type}(\s|" . Str::ALL_SPACES . ")/xui";
+        return "/(\s|" . Chr::ALL_SPACES . "){$type}(\s|" . Chr::ALL_SPACES . ")/xui";
     }
 }

@@ -16,7 +16,7 @@ namespace Typeset\Module\Modules;
 
 use phpQuery;
 use Typeset\Module\AbstractModule;
-use Typeset\Support\Str;
+use Typeset\Support\Chr;
 
 class Quotes extends AbstractModule
 {
@@ -115,15 +115,15 @@ class Quotes extends AbstractModule
             self::ESCAPED_OPEN_SINGLE_QUOTE,
             self::ESCAPED_CLOSE_SINGLE_QUOTE,
         ], [
-            "$1" . Str::ldquo() . "$2",
-            "$1" . Str::rdquo() . "$2",
-            "$1" . Str::rdquo(),
-            "$1" . Str::lsquo() . "$2",
-            "$1" . Str::rsquo() . "$2",
-            "$1" . Str::rsquo() . "$3",
-            Str::uchrs(['zwsp', 'rsquo']) . "$2$3", //  zwsp prevents HanginPunctuation
-            Str::uchrs(['zwsp', 'rsquo']) . "$2$3", // from wrapping these
-            "$1" . Str::rsquo(),
+            "$1" . Chr::ldquo() . "$2",
+            "$1" . Chr::rdquo() . "$2",
+            "$1" . Chr::rdquo(),
+            "$1" . Chr::lsquo() . "$2",
+            "$1" . Chr::rsquo() . "$2",
+            "$1" . Chr::rsquo() . "$3",
+            Chr::gets(['zwsp', 'rsquo']) . "$2$3", //  zwsp prevents HanginPunctuation
+            Chr::gets(['zwsp', 'rsquo']) . "$2$3", // from wrapping these
+            "$1" . Chr::rsquo(),
             '\"', // switch to str_replace?
             '\"', // switch to str_replace?
             "\'", // switch to str_replace?
@@ -137,10 +137,10 @@ class Quotes extends AbstractModule
                 self::SINGLE_PRIME,
                 self::PRIME_FIX,
             ], [
-                Str::tprime(), // switch to str_replace?
-                Str::dprime(),
-                Str::prime(), // switch to str_replace?
-                '$1' . Str::uchr('nbsp') . '$2',
+                Chr::tprime(), // switch to str_replace?
+                Chr::dprime(),
+                Chr::prime(), // switch to str_replace?
+                '$1' . Chr::nbsp() . '$2',
             ], $text);
         }
 

@@ -4,7 +4,7 @@ namespace Typeset\Support;
 
 use Typeset\Module\ModuleException;
 
-class Str
+class Chr
 {
     /**
      * List of characters used throughout Typeset
@@ -65,17 +65,17 @@ class Str
     {
         // Throw an exception if the alias does not exist.
         if (!isset(self::ALIASES[$code])) {
-            throw new ModuleException("[$code] is not a valid uchr alias.");
+            throw new ModuleException("[$code] is not a valid character alias.");
         }
 
         if (empty($arguments)) {
             // If there are no arguments, get the character.
-            return self::uchr($code);
+            return self::get($code);
         } else if (count($arguments) === 1){
             // Otherwise, we assume that the objective is to wrap
             // the required character with another character,
             // defined in the first argument of the call.
-            return self::uchrs([$arguments[0], $code, $arguments[0]]);
+            return self::gets([$arguments[0], $code, $arguments[0]]);
         }
     }
 
@@ -83,7 +83,7 @@ class Str
      * Obtain a unicode character by code.
      * @param $code
      */
-    public static function uchr($code)
+    public static function get($code)
     {
         // If this is an alias, then translate it.
         if (isset(self::ALIASES[$code])) {
@@ -98,13 +98,13 @@ class Str
      * Obtain a sequence of unicode characters by their codes.
      * @param $codes
      */
-    public static function uchrs($codes)
+    public static function gets($codes)
     {
         // For each of the codes provided, return a
         // string of characters.
         $result = '';
         foreach ($codes as $code) {
-            $result .= self::uchr($code);
+            $result .= self::get($code);
         }
 
         return $result;

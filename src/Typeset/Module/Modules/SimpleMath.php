@@ -13,7 +13,7 @@
 namespace Typeset\Module\Modules;
 
 use Typeset\Module\AbstractModule;
-use Typeset\Support\Str;
+use Typeset\Support\Chr;
 
 class SimpleMath extends AbstractModule
 {
@@ -24,8 +24,8 @@ class SimpleMath extends AbstractModule
      */
     public function process($text, $node)
     {
-        $text = preg_replace('/(\d+)\s?x\s?(\d+)/', '$1' . Str::multiply('hairspace') . '$2', $text);
-        $text = preg_replace('/(\d+)\s?\/\s?(\d+)/', '$1' . Str::divide('hairspace') . '$2', $text);
+        $text = preg_replace('/(\d+)\s?x\s?(\d+)/', '$1' . Chr::multiply('hairspace') . '$2', $text);
+        $text = preg_replace('/(\d+)\s?\/\s?(\d+)/', '$1' . Chr::divide('hairspace') . '$2', $text);
         $text = preg_replace(
             '/\b(\d+)\^(\w+)\b/xu',
             sprintf('$1<sup%s>$2</sup>', empty($this->config->exponentClass) ? '' : ' class="' . $this->config->exponentClass . '"'),
