@@ -1,3 +1,6 @@
+> ### Project Retired
+> PHP Typeset is ‘retired’, as of 26 September 2017. An excellent alternative is [PHP Typography](https://github.com/mundschenk-at/php-typography), now installable via Composer.
+
 ![](before_after.gif)
 
 **[PHP Typeset](https://rockett.pw/typeset/)** is a port of [Typeset.js](https://github.com/davidmerfield/Typeset) to PHP. Typeset is an HTML pre-processor for web typography. It provides correct quotation substitution, small-caps conversion, hyphenation, basic ligatures, hanging-punctuation, space substitution, and more.
@@ -143,19 +146,13 @@ $html = $typeset->typeset($html);
 
 ### Some notes
 
-**In ALPHA, PHP Typeset is currently under development, and is subject to change.**
-
-On the to-do list:
+**The following features/enhancements are not available:**
 
 - [Dewidowing](https://github.com/davidmerfield/Typeset/issues/34)
-- Explore the possibility of switching to an HTML5-compatible parser. At this time, only [one](https://github.com/Masterminds/html5-php) appears to be worthy. This would require a change in architecture as the process for replacing nodes/data thereof would change.
-- See what can be done to improve performance (speed is the current issue). At this point, `preg_replace` seems to be a culprit in a few modules. Perhaps we could use some sort of `str_replace` trickery or perhaps a string tokeniser (not familiar with such; just sprung to mind). (Refer: [#1](https://github.com/mikerockett/php-typeset/issues/1))
-  - 2017-01-14: Performance for the SmallCaps module has been improved significantly as it now uses the [same method](https://github.com/mundschenk-at/wp-typography/blob/master/php-typography/class-settings.php#L684) found in [PHP Typography](https://github.com/mundschenk-at/wp-typography/tree/master/php-typography) (GNU GPL). Several different methods were attempted, and this method landed up winning. The original method by David *may* have been faster on JS (untested), but 200-400ms on PHP is far too long.
-- Check order of modules — seems to be okay in current form. Some modules *could* be merged with others and renamed accordingly. Then certain parts of these merged modules could be disabled by config.
-  - 2017-01-14: Module orders have been modified to prevent whitespace bugs relating to en/em dashes. being discarded when splitting paragraphs into arrays.
-- Tests! Please don’t use in production (unless you trust me) until the tests are up. Once they are up, I’ll start a semver release pattern. (2017-01-15: Not ready yet, but underway.)
+- Explore the possibility of switching to an HTML5-compatible parser.
+- See what can be done to improve performance
+- Other related modules, such as hyphenation
 
-2017-01-14: **phpQuery** has now been included in the library itself due to several changes that needed to be made to allow for custom elements. Additionally, phpQuery has been trimmed down considerably, where unneeded features were removed. With that said, it is still essential that Typeset adopts an HTML5 parser for the future.
 
 ### License
 
